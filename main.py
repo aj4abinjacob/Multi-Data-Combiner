@@ -5,16 +5,25 @@ from numpy import absolute
 import pandas as pd
 import os
 import pathlib
+from tkinter import Tk
+
+
+# root.withdraw()
+# file_path = filedialog.askopenfilename(parent=root)
+
 
 eel.init("web")
 filenames = []
 
 
 @eel.expose
-def selectFiles(du):
-    print(du)
+def selectFiles():
     global filenames
-    filenames = askopenfilenames(title="Open 'csv','xls', or 'xlsx' files")
+    root = Tk()
+    root.wm_attributes("-topmost", 1)
+    root.wm_state("iconic")
+    filenames = askopenfilenames(title="Open 'csv','xls', or 'xlsx' files", parent=root)
+    root.destroy()
     all_columns = []
     for file in filenames:
         df = pd.read_csv(file, nrows=100)
@@ -23,7 +32,12 @@ def selectFiles(du):
         all_columns = list(dict.fromkeys(all_columns))
         # print(df.columns)
         # all_columns += df.columns
-    return ":::".join([str(x) for x in all_columns])
+    all_columns_and_file_names = (
+        ":::".join([str(x) for x in all_columns])
+        + "::::"
+        + ",".join([x for x in filenames])
+    )
+    return all_columns_and_file_names
 
 
 start = False

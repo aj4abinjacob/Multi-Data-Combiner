@@ -4,6 +4,9 @@ var newField, current_div_selection
 let right_div = document.getElementById("rightDiv")
 let remove_button_variable = 0;
 let col_names_selection = 'add_columns_'
+
+
+
 function addMore(){
     newDiv = document.createElement('div');
     newDiv.setAttribute('id',`sub_div_${remove_button_variable}`)
@@ -34,6 +37,7 @@ function addMore(){
     newField.setAttribute('size',50);
     newField.setAttribute('onclick','columnNameSelection(this.id)')
     newField.setAttribute('placeholder','Column Names');
+
     sub_main_div.appendChild(newField);
 
 // Remove Button
@@ -41,7 +45,7 @@ function addMore(){
     newField.setAttribute('type','button');
     newField.setAttribute('id',`remove_column_${remove_button_variable}`)
     newField.setAttribute('class',`remove_class_${remove_button_variable}`);
-    newField.setAttribute('onclick',"sayHello(this)")
+    newField.setAttribute('onclick',"removeButton(this)")
     newField.setAttribute("value","Remove")
     sub_main_div.appendChild(newField);
 
@@ -58,9 +62,10 @@ function addMore(){
     remove_button_variable ++
   }
 
-// function setCurrentDiv2(input){
-//   current_div_selection = input.id
-// }
+  //running once to change ugly ui
+addMore()
+
+
 function columnNameSelection(val){
   if (val.includes("columns")){
     col_names_selection = 'add_columns'
@@ -71,15 +76,15 @@ function columnNameSelection(val){
 }
 
 function setCurrentDiv(div_clicked){
-  console.log(col_names_selection)
+  // console.log(col_names_selection)
   current_div_selection = `${col_names_selection}_${div_clicked}`
-  console.log(current_div_selection)
+  // console.log(current_div_selection)
 
 }
 
 function sendColumnNameToInput(column_name){
 
-  console.log(column_name.value)
+  // console.log(column_name.value)
   let current_column_names = document.getElementById(current_div_selection)
   if (current_column_names.value.length > 0 && col_names_selection === 'add_columns'){
     document.getElementById(current_div_selection).value = `${document.getElementById(current_div_selection).value},${column_name.value}`
@@ -100,32 +105,51 @@ function addColumnNameButtons(column_name){
   new_column_button.setAttribute('id',column_name)
   new_column_button.setAttribute('class','all_column_names')
   new_column_button.setAttribute('onclick','sendColumnNameToInput(this)')
-  console.log(column_name)
+  // console.log(column_name)
   right_div.appendChild(new_column_button)
 
 }
 
 
 
-function sayHello(button){
-    console.log(button.className)
+function removeButton(button){
+    // console.log(button.className)
     document.querySelectorAll(`.${button.className}`).forEach(el => el.remove());
     
 }
 
-// document.querySelector("#add_button").addEventListener('click', sayHello)
+function show_files_selected(files){
+  pre_tag_for_files = document.getElementById("pre_tag_for_files")
+  
+  files = files.split(",")
+  files.forEach((el)=>{
+    console.log(el)
+    pre_tag_for_files.textContent += `\n${el}`
+  })
+
+}
 
 
-
+//Running this function while clicking browse button
 var all_column_names;
 function getFiles(){
-  eel.selectFiles("Hello from js")(function(ret){all_column_names= ret});
+  eel.selectFiles()(function(ret){
+    all_column_names = ret.split("::::")[0]
+    file_names_from_python = ret.split("::::")[1]
+    show_files_selected(file_names_from_python)
+    // console.log(all_column_names)
+    // if (all_column_names.includes("date")){alert("date")}
+  });
 };
 
 function sendColumnsPy(){
   let column_names2send = document.getElementsByName("column_names")
   let column_name2send = document.getElementsByName("column_name")
   let string_column_names = ""
+  column_name2send_string = ""
+  column_name2send.forEach((el)=> column_name2send_string+el.value)
+  if (column_name2send_string.length < 1){alert("Please enter at least one column");
+}else {
   for (let i= 0; i < column_names2send.length; i++){
     string_column_names += `:::${column_names2send[i].value}`
   }
@@ -136,23 +160,23 @@ function sendColumnsPy(){
 
   eel.logColumnNames(string_column_name,string_column_names);
 }
+}
 
 function submitFiles(){
+  
   all_column_names = all_column_names.split(":::")
   all_column_names.sort()
-
-
   for (let i= 0; i < all_column_names.length; i++){
     addColumnNameButtons(all_column_names[i]);
   }
    document.getElementById("welcome").style.display = "none"
    document.getElementById("combine").style.display = "inline"
    document.getElementById("rightDiv").style.display = "inline"
+   document.getElementById("firstsub").style.display = "inline"
+
 
 }
 
 for (let i= 0; i < all_column_names.length; i++){
   alert(all_column_names[i]);
 }
-
-console.log(all_column_names)

@@ -1,3 +1,10 @@
+@import url("https://fonts.googleapis.com/css?family=Cabin:400,500,700|Montserrat:400,500,700");
+
+body {
+  font-family: "Cabin", sans-serif;
+  background-color: #fff;
+}
+
 #columnContainer {
   display: flex;
 
@@ -17,6 +24,8 @@
 
 #firstsub {
   width: 60%;
+  display: none;
+
   /* background: blue; */
 }
 
@@ -104,7 +113,21 @@
 
 #combine {
   position: fixed;
+  color: #fff;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+    Ubuntu, sans-serif;
   bottom: 0px;
   right: 0px;
   display: none;
+  background-color: #405cf5;
+  border-radius: 6px;
+  border-width: 0;
+  box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
+    rgba(50, 50, 93, 0.1) 0 2px 5px 0, rgba(0, 0, 0, 0.07) 0 1px 1px 0;
+  box-sizing: border-box;
+  outline: none;
+  overflow: hidden;
+  padding: 0 25px;
+  height: 44px;
 }
