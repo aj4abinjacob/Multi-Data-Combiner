@@ -1,54 +1,158 @@
-var add_more_fields = document.querySelector(".add_more_button");
-var remove_button = document.querySelector(".remove_more");
-var survey_options = document.getElementById('divLeft');
-var submit_button = document.getElementById("submit_button")
-var x = 0
-function add_more(){
-    var newField = document.createElement('input');
+
+let main_div = document.getElementById("sub")
+var newField, current_div_selection
+let right_div = document.getElementById("rightDiv")
+let remove_button_variable = 0;
+let col_names_selection = 'add_columns_'
+function addMore(){
+    newDiv = document.createElement('div');
+    newDiv.setAttribute('id',`sub_div_${remove_button_variable}`)
+    newDiv.setAttribute('class',`remove_class_${remove_button_variable} sub_div`)
+    newDiv.setAttribute('onclick',`setCurrentDiv(${remove_button_variable})`)
+    current_div_selection = `add_columns_${remove_button_variable}`
+    main_div.appendChild(newDiv);
+    sub_main_div = document.getElementById(`sub_div_${remove_button_variable}`)
+// Column name
+    newField  = document.createElement('input');
     newField.setAttribute('type','text');
-    newField.setAttribute('name',`survey_options_${x}`);
-    newField.setAttribute('class','survey_options');
-    newField.setAttribute('siz',50);
+    newField.setAttribute('id',`add_column_${remove_button_variable}`)
+    newField.setAttribute('name',`column_name`);
+    newField.setAttribute('class',`remove_class_${remove_button_variable} inputclass`);
+    newField.setAttribute('size',50);
     newField.setAttribute('placeholder','Column Name');
-    survey_options.appendChild(newField);
-    x ++
-  }
-var rightDiv = document.getElementById('divRight');
- function add_og_column(value){
-    var newField = document.createElement('button');
+    newField.setAttribute('onclick','columnNameSelection(this.id)')
+    sub_main_div.appendChild(newField);
+    
+
+// Column names
+    newField = document.createElement('input');
+    newField.setAttribute('type','text');
+    newField.setAttribute('id',`add_columns_${remove_button_variable}`)
+    newField.setAttribute('onclick',`setCurrentDiv(${remove_button_variable})`)
+    newField.setAttribute('name',`column_names`);
+    newField.setAttribute('class',`remove_class_${remove_button_variable} inputclass`);
+    newField.setAttribute('size',50);
+    newField.setAttribute('onclick','columnNameSelection(this.id)')
+    newField.setAttribute('placeholder','Column Names');
+    sub_main_div.appendChild(newField);
+
+// Remove Button
+    newField = document.createElement('input');
     newField.setAttribute('type','button');
-    newField.setAttribute('content','fdfdf')
-    newField.setAttribute('id',value);
-    newField.textContent = value;
-    rightDiv.appendChild(newField);
+    newField.setAttribute('id',`remove_column_${remove_button_variable}`)
+    newField.setAttribute('class',`remove_class_${remove_button_variable}`);
+    newField.setAttribute('onclick',"sayHello(this)")
+    newField.setAttribute("value","Remove")
+    sub_main_div.appendChild(newField);
+
+// BR
+    newField = document.createElement('br');
+    newField.setAttribute('class',`remove_class_${remove_button_variable}`);
+    main_div.appendChild(newField);
+    newField = document.createElement('br');
+    newField.setAttribute('class',`remove_class_${remove_button_variable}`);
+    sub_main_div.appendChild(newField);
+
+    document.getElementById(`sub_div_${remove_button_variable}`).scrollIntoView();
+
+    remove_button_variable ++
   }
-let test_column_array = ['root','Author','Column']
 
-for (index in test_column_array){
-    add_og_column(test_column_array[index])
+// function setCurrentDiv2(input){
+//   current_div_selection = input.id
+// }
+function columnNameSelection(val){
+  if (val.includes("columns")){
+    col_names_selection = 'add_columns'
+  }else {
+    col_names_selection = 'add_column'
+  }
+
 }
 
-let input_tags;
-function remove_field(){
+function setCurrentDiv(div_clicked){
+  console.log(col_names_selection)
+  current_div_selection = `${col_names_selection}_${div_clicked}`
+  console.log(current_div_selection)
 
-    input_tags = survey_options.getElementsByClassName('survey_options');
-    if (input_tags.length > 0){
-    x --
-    survey_options.removeChild(input_tags[(input_tags.length - 1)]);
-    }
 }
 
-// remove_fields.onclick = function(){
-//     var input_tags = survey_options.getElementsByTagName('input');
-//     if(input_tags.length > 2) {
-//       survey_options.removeChild(input_tags[(input_tags.length) - 1]);
-//     }
+function sendColumnNameToInput(column_name){
 
-add_more_fields.addEventListener('click',add_more);
-remove_button.addEventListener('click',remove_field)
-submit_button.addEventListener('click', function() {
-    for (index in document.getElementsByClassName("survey_options")){
-        let item = document.getElementsByClassName("survey_options")[index].value;
-        console.log(item);
-    }
-})
+  console.log(column_name.value)
+  let current_column_names = document.getElementById(current_div_selection)
+  if (current_column_names.value.length > 0 && col_names_selection === 'add_columns'){
+    document.getElementById(current_div_selection).value = `${document.getElementById(current_div_selection).value},${column_name.value}`
+  }
+  else{
+    document.getElementById(current_div_selection).value = column_name.value
+  }
+  
+
+}
+
+
+
+function addColumnNameButtons(column_name){
+  new_column_button = document.createElement('input');
+  new_column_button.setAttribute('type','button');
+  new_column_button.setAttribute('value',column_name)
+  new_column_button.setAttribute('id',column_name)
+  new_column_button.setAttribute('class','all_column_names')
+  new_column_button.setAttribute('onclick','sendColumnNameToInput(this)')
+  console.log(column_name)
+  right_div.appendChild(new_column_button)
+
+}
+
+
+
+function sayHello(button){
+    console.log(button.className)
+    document.querySelectorAll(`.${button.className}`).forEach(el => el.remove());
+    
+}
+
+// document.querySelector("#add_button").addEventListener('click', sayHello)
+
+
+
+var all_column_names;
+function getFiles(){
+  eel.selectFiles("Hello from js")(function(ret){all_column_names= ret});
+};
+
+function sendColumnsPy(){
+  let column_names2send = document.getElementsByName("column_names")
+  let column_name2send = document.getElementsByName("column_name")
+  let string_column_names = ""
+  for (let i= 0; i < column_names2send.length; i++){
+    string_column_names += `:::${column_names2send[i].value}`
+  }
+  let string_column_name = ""
+  for (let i= 0; i < column_name2send.length; i++){
+    string_column_name += `:::${column_name2send[i].value}`
+  }
+
+  eel.logColumnNames(string_column_name,string_column_names);
+}
+
+function submitFiles(){
+  all_column_names = all_column_names.split(":::")
+  all_column_names.sort()
+
+
+  for (let i= 0; i < all_column_names.length; i++){
+    addColumnNameButtons(all_column_names[i]);
+  }
+   document.getElementById("welcome").style.display = "none"
+   document.getElementById("combine").style.display = "inline"
+   document.getElementById("rightDiv").style.display = "inline"
+
+}
+
+for (let i= 0; i < all_column_names.length; i++){
+  alert(all_column_names[i]);
+}
+
+console.log(all_column_names)
