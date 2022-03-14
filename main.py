@@ -12,6 +12,13 @@ from tkinter import Tk
 # file_path = filedialog.askopenfilename(parent=root)
 
 
+# def lowAndStrip(text):
+#     text = str(text)
+#     text = text.strip()
+#     text = " ".join(text.split())
+#     return text
+
+
 eel.init("web")
 filenames = []
 
@@ -45,7 +52,7 @@ start = False
 
 @eel.expose
 def logColumnNames(column_name, column_names):
-    print(column_name, "|||", column_names)
+    # print(column_name, "|||", column_names)
 
     column_name = column_name.split(":::")
     column_names = column_names.split(":::")
@@ -53,7 +60,7 @@ def logColumnNames(column_name, column_names):
     wordlines = ""
     for nu, col in enumerate(column_name):
         wordlines += f"{col},{column_names[nu]}".strip(",") + ":::"
-    print(wordlines, "hee")
+    # print(wordlines, "hee")
     # print(column_name, "|", column_names)
     file_directory = pathlib.Path(filenames[0]).parent.resolve()
     # Combiner
@@ -67,13 +74,14 @@ def logColumnNames(column_name, column_names):
         print(line, "h")
         for x in line:
             if x != "" and x != "\n":
-                fin_col.append(x.strip())
+                fin_col.append(x)
         if len(fin_col) == 1:
             final_columns[fin_col[0]] = fin_col
         else:
             final_columns[fin_col[0]] = fin_col[1:]
-
-    file_list2 = []
+    big_df = pd.DataFrame(columns=final_columns.keys())
+    # file_list2 = []
+    absolute_path = os.path.join(file_directory, f"_chikku_combined.csv")
     for file in filenames:
         if file.endswith(".csv"):
             file_name = file.split(".")[0]
@@ -85,31 +93,31 @@ def logColumnNames(column_name, column_names):
                 if k_col not in df.columns:
                     df[k_col] = ""
             df = df[final_columns.keys()]
-            absolute_path = os.path.join(
-                file_directory, f"{file_name}_chikku_combined.csv"
-            )
-            df.to_csv(absolute_path, index=False)
-            file_list2.append(absolute_path)
-            print(f"Formating {file}")
+
+            big_df = pd.concat([big_df, df])
+            # file_list2.append(absolute_path)
+            # print(f"Formating {file}")
             del df
+    big_df.to_csv(absolute_path, index=False)
+    print("Done Saving")
 
-    print("\nCombining the files\n***********")
-    combiner_list = []
-    for file in file_list2:
-        if file.endswith(".csv"):
-            print(f"Combining {file}")
-            df = pd.read_csv(file, index_col=None, header=0, low_memory=False)
-            combiner_list.append(df)
-    frame = pd.concat(combiner_list, axis=0, ignore_index=True)
-    absolute_path = os.path.join(file_directory, f"Combined.csv")
-    frame.to_csv(absolute_path, index=False)
+    # print("\nCombining the files\n***********")
+    # combiner_list = []
+    # for file in file_list2:
+    #     if file.endswith(".csv"):
+    #         print(f"Combining {file}")
+    #         df = pd.read_csv(file, index_col=None, header=0, low_memory=False)
+    #         combiner_list.append(df)
+    # frame = pd.concat(combiner_list, axis=0, ignore_index=True)
+    # absolute_path = os.path.join(file_directory, f"Combined.csv")
+    # frame.to_csv(absolute_path, index=False)
 
-    for fi in os.listdir(file_directory):
-        if fi.endswith("_chikku_combined.csv"):
-            absolute_path = os.path.join(file_directory, f"{fi}")
-            os.remove(absolute_path)
+    # for fi in os.listdir(file_directory):
+    #     if fi.endswith("_chikku_combined.csv"):
+    #         absolute_path = os.path.join(file_directory, f"{fi}")
+    #         os.remove(absolute_path)
 
-    print("Done! combined and saved in Combined.csv")
+    # print("Done! combined and saved in Combined.csv")
 
 
 eel.start("index.html", size=(1000, 600))
