@@ -20,7 +20,7 @@ function addMore(){
     newField.setAttribute('type','text');
     newField.setAttribute('id',`add_column_${remove_button_variable}`)
     newField.setAttribute('name',`column_name`);
-    newField.setAttribute('class',`remove_class_${remove_button_variable} inputclass`);
+    newField.setAttribute('class',`remove_class_${remove_button_variable} inputclass submitcol2check`);
     newField.setAttribute('size',50);
     newField.setAttribute('placeholder','Column Name');
     newField.setAttribute('onclick','columnNameSelection(this.id)')
@@ -168,10 +168,13 @@ var run_while_loop = true
 
 function sendColumnsPy(){
   column_names2send = document.getElementsByName("column_names")
-  let column_name2send = document.getElementsByName("column_name")
+  let column_name2send = document.getElementsByClassName("submitcol2check")
   let string_column_names = ""
   column_name2send_string = ""
-  column_name2send.forEach((el)=> column_name2send_string+el.value)
+  for(index in column_name2send){
+    if (typeof column_name2send[index].value === "string"){column_name2send_string += column_name2send[index].value}}
+  // column_name2send.forEach((el)=> { column_name2send_string+el.value})
+  console.log(column_name2send_string)
   if (column_name2send_string.length < 1){alert("Please enter at least one column");
 }else {
 
@@ -184,13 +187,12 @@ function sendColumnsPy(){
   }
 
   eel.logColumnNames(string_column_name,string_column_names);
-  run_while_loop = false
 }
 }
 
 var columns2check = document.getElementsByClassName("col2check")
 function columCheck(){
- 
+//  console.log(all_column_names)
   all_column_names.forEach((el)=>{
     columns2check = document.getElementsByClassName("col2check")
     col2checkarray = []
@@ -213,5 +215,5 @@ for (let i = 1; i < 100000; i++) {
     // console.log("hello world");
     // document.getElementById(`btn_id_date`).style.color = "red"
     columCheck();
-  }, i * 500);
+  }, i * 5000);
 }
