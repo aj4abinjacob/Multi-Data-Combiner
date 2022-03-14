@@ -33,7 +33,7 @@ function addMore(){
     newField.setAttribute('id',`add_columns_${remove_button_variable}`)
     newField.setAttribute('onclick',`setCurrentDiv(${remove_button_variable})`)
     newField.setAttribute('name',`column_names`);
-    newField.setAttribute('class',`remove_class_${remove_button_variable} inputclass`);
+    newField.setAttribute('class',`remove_class_${remove_button_variable} inputclass col2check`);
     newField.setAttribute('size',50);
     newField.setAttribute('onclick','columnNameSelection(this.id)')
     newField.setAttribute('placeholder','Column Names');
@@ -102,7 +102,7 @@ function addColumnNameButtons(column_name){
   new_column_button = document.createElement('input');
   new_column_button.setAttribute('type','button');
   new_column_button.setAttribute('value',column_name)
-  new_column_button.setAttribute('id',column_name)
+  new_column_button.setAttribute('id',`btn_id_${column_name}`)
   new_column_button.setAttribute('class','all_column_names')
   new_column_button.setAttribute('onclick','sendColumnNameToInput(this)')
   // console.log(column_name)
@@ -120,7 +120,8 @@ function removeButton(button){
 
 function show_files_selected(files){
   pre_tag_for_files = document.getElementById("pre_tag_for_files")
-  
+  document.getElementById("allfilesh2").textContent = "All Files Selected"
+
   files = files.split(",")
   files.forEach((el)=>{
     console.log(el)
@@ -142,25 +143,6 @@ function getFiles(){
   });
 };
 
-function sendColumnsPy(){
-  let column_names2send = document.getElementsByName("column_names")
-  let column_name2send = document.getElementsByName("column_name")
-  let string_column_names = ""
-  column_name2send_string = ""
-  column_name2send.forEach((el)=> column_name2send_string+el.value)
-  if (column_name2send_string.length < 1){alert("Please enter at least one column");
-}else {
-  for (let i= 0; i < column_names2send.length; i++){
-    string_column_names += `:::${column_names2send[i].value}`
-  }
-  let string_column_name = ""
-  for (let i= 0; i < column_name2send.length; i++){
-    string_column_name += `:::${column_name2send[i].value}`
-  }
-
-  eel.logColumnNames(string_column_name,string_column_names);
-}
-}
 
 function submitFiles(){
   
@@ -177,6 +159,59 @@ function submitFiles(){
 
 }
 
-for (let i= 0; i < all_column_names.length; i++){
-  alert(all_column_names[i]);
+var column_names2send
+
+var run_while_loop = true
+
+
+
+
+function sendColumnsPy(){
+  column_names2send = document.getElementsByName("column_names")
+  let column_name2send = document.getElementsByName("column_name")
+  let string_column_names = ""
+  column_name2send_string = ""
+  column_name2send.forEach((el)=> column_name2send_string+el.value)
+  if (column_name2send_string.length < 1){alert("Please enter at least one column");
+}else {
+
+  for (let i= 0; i < column_names2send.length; i++){
+    string_column_names += `:::${column_names2send[i].value}`
+  }
+  let string_column_name = ""
+  for (let i= 0; i < column_name2send.length; i++){
+    string_column_name += `:::${column_name2send[i].value}`
+  }
+
+  eel.logColumnNames(string_column_name,string_column_names);
+  run_while_loop = false
+}
+}
+
+var columns2check = document.getElementsByClassName("col2check")
+function columCheck(){
+ 
+  all_column_names.forEach((el)=>{
+    columns2check = document.getElementsByClassName("col2check")
+    col2checkarray = []
+    for (let i= 0; i < columns2check.length; i++){
+      columns2check[i].value.split(",").forEach((val)=>{col2checkarray.push(val)})
+    }
+    if (col2checkarray.includes(el)){
+      document.getElementById(`btn_id_${el}`).style.color = "red"}
+    else{
+      document.getElementById(`btn_id_${el}`).style.color = "black"
+    }
+  })
+}
+
+
+
+
+for (let i = 1; i < 100000; i++) {
+  setTimeout(function timer() {
+    // console.log("hello world");
+    // document.getElementById(`btn_id_date`).style.color = "red"
+    columCheck();
+  }, i * 500);
 }
