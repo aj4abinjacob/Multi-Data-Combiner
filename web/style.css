@@ -49,6 +49,7 @@ body {
   position: sticky;
   top: 4rem;
   display: none;
+  padding-bottom: 25px;
 }
 
 .all_column_names {
@@ -113,12 +114,15 @@ body {
 
 #combine {
   position: fixed;
+  bottom: 0px;
+  right: 0px;
+  /* justify-content: flex-end;
+  display: flex; */
   color: #fff;
   cursor: pointer;
   font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
     Ubuntu, sans-serif;
-  bottom: 0px;
-  right: 0px;
+  
   display: none;
   background-color: #405cf5;
   border-radius: 6px;
@@ -130,4 +134,5 @@ body {
   overflow: hidden;
   padding: 0 25px;
   height: 44px;
+  
 }

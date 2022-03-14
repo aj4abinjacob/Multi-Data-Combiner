@@ -19,6 +19,22 @@ from tkinter import Tk
 #     return text
 
 
+def readDf(file):
+    if file.endswith(".csv") or file.endswith(".tsv"):
+        df = pd.read_csv(file, low_memory=False)
+    elif file.endswith(".xlsx") or file.endswith(".xls"):
+        df = pd.read_excel(file, low_memory=False)
+    return df
+
+
+def readDfCols(file):
+    if file.endswith(".csv") or file.endswith(".tsv"):
+        df = pd.read_csv(file, low_memory=False, nrows=100)
+    elif file.endswith(".xlsx") or file.endswith(".xls"):
+        df = pd.read_excel(file, low_memory=False, nrows=100)
+    return df
+
+
 eel.init("web")
 filenames = []
 
@@ -33,7 +49,7 @@ def selectFiles():
     root.destroy()
     all_columns = []
     for file in filenames:
-        df = pd.read_csv(file, nrows=100)
+        df = readDfCols(file)
         for x in df.columns:
             all_columns.append(x)
         all_columns = list(dict.fromkeys(all_columns))
@@ -71,7 +87,6 @@ def logColumnNames(column_name, column_names):
     for line in wordlines.split(":::"):
         line = line.split(",")
         fin_col = []
-        print(line, "h")
         for x in line:
             if x != "" and x != "\n":
                 fin_col.append(x)
@@ -85,7 +100,7 @@ def logColumnNames(column_name, column_names):
     for file in filenames:
         if file.endswith(".csv"):
             file_name = file.split(".")[0]
-            df = pd.read_csv(file, low_memory=False)
+            df = readDf(file)
             for k in final_columns:
                 for v in final_columns[k]:
                     df.rename({v: k}, axis=1, inplace=True)
@@ -100,6 +115,7 @@ def logColumnNames(column_name, column_names):
             del df
     big_df.to_csv(absolute_path, index=False)
     print("Done Saving")
+    return f"Done Saving Files"
 
     # print("\nCombining the files\n***********")
     # combiner_list = []

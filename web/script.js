@@ -186,7 +186,9 @@ function sendColumnsPy(){
     string_column_name += `:::${column_name2send[i].value}`
   }
 
-  eel.logColumnNames(string_column_name,string_column_names);
+  eel.logColumnNames(string_column_name,string_column_names)(function(ret){
+    alert(ret);
+  });
 }
 }
 
@@ -215,5 +217,5 @@ for (let i = 1; i < 100000; i++) {
     // console.log("hello world");
     // document.getElementById(`btn_id_date`).style.color = "red"
     columCheck();
-  }, i * 5000);
+  }, i * 1000);
 }
