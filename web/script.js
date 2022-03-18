@@ -1,221 +1,348 @@
+var inputs_container,
+  column_inputs_container_var,
+  current_selection,
+  all_file_names,
+  more_than_one_input;
 
-let main_div = document.getElementById("sub")
-var newField, current_div_selection
-let right_div = document.getElementById("rightDiv")
-let remove_button_variable = 0;
-let col_names_selection = 'add_columns_'
+all_file_names = [];
+all_column_names = [];
+var already_showed_files = [];
 
+// Extract number from string
+function getOnlyNumber(text) {
+  return Number(text.replace(/\D/g, ""));
+}
 
+// Count number of items occurring in an array
+function count(arr) {
+  return arr.reduce(
+    (prev, curr) => ((prev[curr] = ++prev[curr] || 1), prev),
+    {}
+  );
+}
 
-function addMore(){
-    newDiv = document.createElement('div');
-    newDiv.setAttribute('id',`sub_div_${remove_button_variable}`)
-    newDiv.setAttribute('class',`remove_class_${remove_button_variable} sub_div`)
-    newDiv.setAttribute('onclick',`setCurrentDiv(${remove_button_variable})`)
-    current_div_selection = `add_columns_${remove_button_variable}`
-    main_div.appendChild(newDiv);
-    sub_main_div = document.getElementById(`sub_div_${remove_button_variable}`)
-// Column name
-    newField  = document.createElement('input');
-    newField.setAttribute('type','text');
-    newField.setAttribute('id',`add_column_${remove_button_variable}`)
-    newField.setAttribute('name',`column_name`);
-    newField.setAttribute('class',`remove_class_${remove_button_variable} inputclass submitcol2check`);
-    newField.setAttribute('size',50);
-    newField.setAttribute('placeholder','Column Name');
-    newField.setAttribute('onclick','columnNameSelection(this.id)')
-    sub_main_div.appendChild(newField);
-    
+//Disable browse button and submit button during initial window
+function showHideWelcomeButton() {
+  if (already_showed_files.length === 0) {
+    document.getElementById("add-more-button").style.display = "none";
+    document.getElementById("welcome-submit-button").style.display = "none";
+  } else {
+    document.getElementById("add-more-button").style.display = "inline-block";
+    document.getElementById("welcome-submit-button").style.display =
+      "inline-block";
+  }
+}
 
-// Column names
-    newField = document.createElement('input');
-    newField.setAttribute('type','text');
-    newField.setAttribute('id',`add_columns_${remove_button_variable}`)
-    newField.setAttribute('onclick',`setCurrentDiv(${remove_button_variable})`)
-    newField.setAttribute('name',`column_names`);
-    newField.setAttribute('class',`remove_class_${remove_button_variable} inputclass col2check`);
-    newField.setAttribute('size',50);
-    newField.setAttribute('onclick','columnNameSelection(this.id)')
-    newField.setAttribute('placeholder','Column Names');
+showHideWelcomeButton();
 
-    sub_main_div.appendChild(newField);
-
-// Remove Button
-    newField = document.createElement('input');
-    newField.setAttribute('type','button');
-    newField.setAttribute('id',`remove_column_${remove_button_variable}`)
-    newField.setAttribute('class',`remove_class_${remove_button_variable}`);
-    newField.setAttribute('onclick',"removeButton(this)")
-    newField.setAttribute("value","Remove")
-    sub_main_div.appendChild(newField);
-
-// BR
-    newField = document.createElement('br');
-    newField.setAttribute('class',`remove_class_${remove_button_variable}`);
-    main_div.appendChild(newField);
-    newField = document.createElement('br');
-    newField.setAttribute('class',`remove_class_${remove_button_variable}`);
-    sub_main_div.appendChild(newField);
-
-    document.getElementById(`sub_div_${remove_button_variable}`).scrollIntoView();
-
-    remove_button_variable ++
+async function getFiles(id) {
+  files_and_columns = await eel.selectFiles()(); // Must prefix call with 'await', otherwise it's the same syntax
+  //   console.log("Got this from Python: " + n[0]);
+  file_names_container = document.getElementById("file-names-container");
+  all_file_names = [...new Set(all_file_names)];
+  if (id === "browse-button") {
+    already_showed_files = [];
+    file_names_container.replaceChildren();
+    document.getElementById("inputs-container").replaceChildren();
+    all_file_names = files_and_columns[0];
+    all_column_names = files_and_columns[1];
+  } else {
+    all_file_names.push(...files_and_columns[0]);
+    all_column_names.push(...files_and_columns[1]);
   }
 
-  //running once to change ugly ui
-addMore()
+  // console.log(all_file_names)
+  // console.log(all_column_names)
 
-
-function columnNameSelection(val){
-  if (val.includes("columns")){
-    col_names_selection = 'add_columns'
-  }else {
-    col_names_selection = 'add_column'
+  // Show file names received
+  for (let i = 0; i < all_file_names.length; i++) {
+    file_name = all_file_names[i];
+    if (already_showed_files.includes(file_name) == false) {
+      file_name_element = document.createElement("p");
+      file_name_element.textContent = `${
+        already_showed_files.length + 1
+      }. ${file_name}`;
+      file_names_container.appendChild(file_name_element);
+      already_showed_files.push(file_name);
+    }
   }
-
+  showHideWelcomeButton();
 }
 
-function setCurrentDiv(div_clicked){
-  // console.log(col_names_selection)
-  current_div_selection = `${col_names_selection}_${div_clicked}`
-  // console.log(current_div_selection)
-
-}
-
-function sendColumnNameToInput(column_name){
-
-  // console.log(column_name.value)
-  let current_column_names = document.getElementById(current_div_selection)
-  if (current_column_names.value.length > 0 && col_names_selection === 'add_columns'){
-    document.getElementById(current_div_selection).value = `${document.getElementById(current_div_selection).value},${column_name.value}`
+let addColumnsFromPython = function () {
+  all_column_container_div = document.getElementById("column-names-container");
+  all_column_container_div.replaceChildren();
+  // Add column names button received from python
+  for (let i = 0; i < all_column_names.length; i++) {
+    column_name = all_column_names[i];
+    column_button = document.createElement("input");
+    column_button.setAttribute("type", "button");
+    column_button.setAttribute("value", column_name);
+    column_button.setAttribute(
+      "class",
+      "all-column-names-button btn all-col-btn"
+    );
+    column_button.setAttribute("id", `button_id_${column_name}`);
+    column_button.setAttribute("onclick", "sendColumnToInput(this.value)");
+    all_column_container_div.appendChild(column_button);
   }
-  else{
-    document.getElementById(current_div_selection).value = column_name.value
-  }
-  
-
-}
-
-
-
-function addColumnNameButtons(column_name){
-  new_column_button = document.createElement('input');
-  new_column_button.setAttribute('type','button');
-  new_column_button.setAttribute('value',column_name)
-  new_column_button.setAttribute('id',`btn_id_${column_name}`)
-  new_column_button.setAttribute('class','all_column_names')
-  new_column_button.setAttribute('onclick','sendColumnNameToInput(this)')
-  // console.log(column_name)
-  right_div.appendChild(new_column_button)
-
-}
-
-
-
-function removeButton(button){
-    // console.log(button.className)
-    document.querySelectorAll(`.${button.className}`).forEach(el => el.remove());
-    
-}
-
-function show_files_selected(files){
-  pre_tag_for_files = document.getElementById("pre_tag_for_files")
-  document.getElementById("allfilesh2").textContent = "All Files Selected"
-
-  files = files.split(",")
-  files.forEach((el)=>{
-    console.log(el)
-    pre_tag_for_files.textContent += `\n${el}`
-  })
-
-}
-
-
-//Running this function while clicking browse button
-var all_column_names;
-function getFiles(){
-  eel.selectFiles()(function(ret){
-    all_column_names = ret.split("::::")[0]
-    file_names_from_python = ret.split("::::")[1]
-    show_files_selected(file_names_from_python)
-    // console.log(all_column_names)
-    // if (all_column_names.includes("date")){alert("date")}
-  });
 };
 
+//Check Input
 
-function submitFiles(){
-  
-  all_column_names = all_column_names.split(":::")
-  all_column_names.sort()
-  for (let i= 0; i < all_column_names.length; i++){
-    addColumnNameButtons(all_column_names[i]);
-  }
-   document.getElementById("welcome").style.display = "none"
-   document.getElementById("combine").style.display = "inline"
-   document.getElementById("rightDiv").style.display = "inline"
-   document.getElementById("firstsub").style.display = "inline"
-
-
-}
-
-var column_names2send
-
-var run_while_loop = true
-
-
-
-
-function sendColumnsPy(){
-  column_names2send = document.getElementsByName("column_names")
-  let column_name2send = document.getElementsByClassName("submitcol2check")
-  let string_column_names = ""
-  column_name2send_string = ""
-  for(index in column_name2send){
-    if (typeof column_name2send[index].value === "string"){column_name2send_string += column_name2send[index].value}}
-  // column_name2send.forEach((el)=> { column_name2send_string+el.value})
-  console.log(column_name2send_string)
-  if (column_name2send_string.length < 1){alert("Please enter at least one column");
-}else {
-
-  for (let i= 0; i < column_names2send.length; i++){
-    string_column_names += `:::${column_names2send[i].value}`
-  }
-  let string_column_name = ""
-  for (let i= 0; i < column_name2send.length; i++){
-    string_column_name += `:::${column_name2send[i].value}`
-  }
-
-  eel.logColumnNames(string_column_name,string_column_names)(function(ret){
-    alert(ret);
-  });
-}
-}
-
-var columns2check = document.getElementsByClassName("col2check")
-function columCheck(){
-//  console.log(all_column_names)
-  all_column_names.forEach((el)=>{
-    columns2check = document.getElementsByClassName("col2check")
-    col2checkarray = []
-    for (let i= 0; i < columns2check.length; i++){
-      columns2check[i].value.split(",").forEach((val)=>{col2checkarray.push(val)})
+function checkInput() {
+  more_than_one_input = 0;
+  column_names_to_check = document.getElementsByClassName("column-names-input");
+  columns_user_has_added = [];
+  for (let i = 0; i < column_names_to_check.length; i++) {
+    input_string = column_names_to_check[i].value;
+    if (input_string.length > 1) {
+      input_string.split(",").forEach((el) => {
+        columns_user_has_added.push(el);
+      });
     }
-    if (col2checkarray.includes(el)){
-      document.getElementById(`btn_id_${el}`).style.color = "red"}
-    else{
-      document.getElementById(`btn_id_${el}`).style.color = "black"
+  }
+  column_names_and_frequencies = count(columns_user_has_added);
+  // console.log(column_names_and_frequencies)
+  for (let i = 0; i < all_column_names.length; i++) {
+    el = all_column_names[i];
+    if (
+      columns_user_has_added.includes(el) &&
+      column_names_and_frequencies[el] === 1
+    ) {
+      document.getElementById(`button_id_${el}`).style.background = "#FFD700"; //yellow
+    } else if (!columns_user_has_added.includes(el)) {
+      document.getElementById(`button_id_${el}`).style.background = "#E0E0E0"; //grey
+    } else {
+      document.getElementById(`button_id_${el}`).style.background = "#FF0000"; //red
+      more_than_one_input++;
     }
-  })
+  }
 }
 
+function initiateProcessScreen() {
+  document.getElementById("welcome-container").style.display = "none";
+  document.getElementById("process-screen").style.display = "block";
+  all_column_names = [...new Set(all_column_names)];
+  all_column_names.sort();
+  addColumnsFromPython();
+  checkInput();
+  addMore();
+}
 
+function goBack() {
+  document.getElementById("welcome-container").style.display = "block";
+  document.getElementById("process-screen").style.display = "none";
+}
 
+// Set current focus
 
-for (let i = 1; i < 100000; i++) {
-  setTimeout(function timer() {
-    // console.log("hello world");
-    // document.getElementById(`btn_id_date`).style.color = "red"
-    columCheck();
-  }, i * 1000);
+function setCurrentFocus(id) {
+  // console.log(id);
+  current_selection = id;
+  checkInput();
+}
+
+// Send column name to input
+
+function sendColumnToInput(column_name) {
+  if (current_selection.includes("column_names_input_")) {
+    existing_value_in_column_names_input =
+      document.getElementById(current_selection).value;
+    existing_value_in_column_names_input_array = document
+      .getElementById(current_selection)
+      .value.split(",");
+    existing_value_in_column_names_input_array =
+      existing_value_in_column_names_input_array.filter((e) => e.length > 0);
+    if (existing_value_in_column_names_input.length > 0) {
+      if (existing_value_in_column_names_input_array.includes(column_name)) {
+        existing_value_in_column_names_input_array =
+          existing_value_in_column_names_input_array.filter(
+            (e) => e !== column_name
+          );
+        // document.getElementById(current_selection).value = existing_value_in_column_names_input.replace(new RegExp("\\b"+column_name+"\\b"), "");
+        // existing_value_in_column_names_input = document.getElementById(current_selection).value
+        // document.getElementById(current_selection).value = existing_value_in_column_names_input.replace(",,",",").replace(/(^,)|(,$)/g, "")
+        document.getElementById(current_selection).value = String(
+          existing_value_in_column_names_input_array
+        );
+      } else {
+        existing_value_in_column_names_input_array.push(column_name);
+        document.getElementById(current_selection).value = String(
+          existing_value_in_column_names_input_array
+        );
+      }
+    } else {
+      document.getElementById(current_selection).value = column_name;
+    }
+  } else {
+    document.getElementById(current_selection).value = column_name;
+  }
+  // Check after sending to input
+  checkInput();
+}
+
+column_inputs_container_var = 1;
+inputs_container = document.getElementById("inputs-container");
+
+function addMore() {
+  // adding header input
+  header_input = document.createElement("input");
+  header_input.setAttribute("type", "input");
+  header_input.setAttribute("placeholder", "Header");
+  header_input.setAttribute("oninput", "checkInput()");
+  // header_input.setAttribute("onkeydown","addAnotherInput()")
+  header_input.setAttribute(
+    "id",
+    `header_input_${column_inputs_container_var}`
+  );
+  header_input.setAttribute("onclick", "setCurrentFocus(this.id)");
+  header_input.setAttribute(
+    "class",
+    `headers-input rm_${column_inputs_container_var} process-input-field`
+  );
+
+  inputs_container.appendChild(header_input);
+
+  // adding column names
+  column_names_input = document.createElement("input");
+  column_names_input.setAttribute("type", "input");
+  column_names_input.setAttribute("placeholder", "Column Names");
+  column_names_input.setAttribute(
+    "id",
+    `column_names_input_${column_inputs_container_var}`
+  );
+  column_names_input.setAttribute("onclick", "setCurrentFocus(this.id)");
+  column_names_input.setAttribute("oninput", "checkInput()");
+  column_names_input.setAttribute(
+    "class",
+    `column-names-input rm_${column_inputs_container_var} process-input-field`
+  );
+  inputs_container.appendChild(column_names_input);
+
+  // adding remove button
+  remove_button = document.createElement("input");
+  remove_button.setAttribute("type", "button");
+  remove_button.setAttribute("value", "Remove");
+  remove_button.setAttribute(
+    "id",
+    `remove_button_${column_inputs_container_var}`
+  );
+  remove_button.setAttribute(
+    "class",
+    `remove-button rm_${column_inputs_container_var} btn`
+  );
+  remove_button.setAttribute("onclick", "removeInputDiv(this)");
+  inputs_container.appendChild(remove_button);
+
+  // Setting focus to current column names input
+  current_selection = `header_input_${column_inputs_container_var}`;
+
+  // set focus to current div when user press add
+  remove_button.scrollIntoView();
+  header_input.focus();
+
+  // Check Input
+  checkInput();
+
+  // adding column_inputs_container_var
+  column_inputs_container_var++;
+}
+
+// Notice enter key
+function keydown(evt) {
+  if (
+    evt.shiftKey &&
+    evt.keyCode === 13 &&
+    document.getElementById("welcome-container").style.display === "none"
+  ) {
+    column_names_input_check =
+      document.getElementsByClassName("column-names-input");
+    inputs_last_element =
+      column_names_input_check[column_names_input_check.length - 1];
+    current_selection_num = getOnlyNumber(current_selection);
+    if (current_selection.includes("header_input")) {
+      current_selection = `column_names_input_${current_selection_num}`;
+      document.getElementById(current_selection).focus();
+    } else if (
+      current_selection.includes("column_names_input") &&
+      current_selection === inputs_last_element.id
+    ) {
+      addMore();
+    } else {
+      next_sibling = document.getElementById(current_selection).nextSibling;
+      next_sibling = document.getElementById(next_sibling.id).nextSibling;
+      next_sibling.focus();
+      current_selection = next_sibling.id;
+    }
+  }
+}
+document.onkeydown = keydown;
+
+// Remove button function
+function removeInputDiv(button) {
+  number_of_inputs = document.getElementsByClassName(`process-input-field`);
+  if (number_of_inputs.length > 2) {
+    rm_class = `${button.className}`.split(" ");
+    rm_class = rm_class[rm_class.length - 2];
+    document.querySelectorAll(`.${rm_class}`).forEach((el) => el.remove());
+    // Check Input
+    checkInput();
+  }
+}
+
+// Send user inputs to python
+
+async function sendUserInputToPython() {
+  column_names_elements = document.getElementsByClassName("column-names-input");
+  column_names = [];
+  for (let i = 0; i < column_names_elements.length; i++) {
+    column_names.push(column_names_elements[i].value);
+  }
+  headers_input_elements = document.getElementsByClassName("headers-input");
+  headers_input = [];
+  for (let i = 0; i < headers_input_elements.length; i++) {
+    headers_input.push(headers_input_elements[i].value);
+  }
+  all_file_names = [...new Set(all_file_names)];
+  valid_submit = true;
+  valid_column_names = true;
+  for (let i = 0; i < column_names.length; i++) {
+    if (headers_input[i] === "" || column_names[i] === "") {
+      valid_submit = false;
+    }
+    each_column_input_elements = column_names[i].split(",");
+    for (let j = 0; j < each_column_input_elements.length; j++) {
+      if (all_column_names.includes(each_column_input_elements[j]) === false) {
+        valid_column_names = false;
+      }
+    }
+  }
+
+  //check to see if user has entered column input more than once
+  checkInput();
+  //
+
+  if (valid_submit === false && valid_column_names === true) {
+    alert("Please fill all input fields");
+  } else if (more_than_one_input > 0) {
+    alert("You have entered a column input more than once");
+  } else if (valid_column_names === false) {
+    alert("Please fill column names input field with valid inputs");
+    // If checks have passed data will start from here
+  } else {
+    for (let i = 0; i < all_file_names.length; i++) {
+      file = all_file_names[i];
+      file_status = await eel.receiveInputs(
+        file,
+        headers_input,
+        column_names
+      )();
+      console.log(file_status);
+    }
+
+    final_status = await eel.finalCombine()();
+    alert(final_status);
+  }
+  // final_status = await eel.finalCombine()();
 }

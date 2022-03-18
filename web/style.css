@@ -1,138 +1,203 @@
 @import url("https://fonts.googleapis.com/css?family=Cabin:400,500,700|Montserrat:400,500,700");
-
-body {
-  font-family: "Cabin", sans-serif;
-  background-color: #fff;
+*{
+    margin:0;
+    font-family: "Cabin", sans-serif;
 }
 
-#columnContainer {
-  display: flex;
 
-  justify-content: space-around;
+/* Button Stuff */
+
+.btn{
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 8px;
+    border-color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: opacity .25s;
 }
 
-#welcome {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  margin: 0%;
-  height: 100%;
-  width: 100%;
-  background: #ffffff;
-  position: fixed;
+#process-screen{
+    display: none;
 }
 
-#firstsub {
-  width: 60%;
-  display: none;
-
-  /* background: blue; */
+.btn:hover{
+    opacity: .8;
 }
 
-.column_names {
-  padding-left: 25px;
-  margin: 5px;
+.btn:active{
+    opacity: .6;
 }
 
-.column_name {
-  margin-right: 16px;
-}
-#divControls {
-  width: 58%;
-  text-align: center;
-}
-
-#rightDiv {
-  width: 40%;
-  /* background: blueviolet; */
-  height: 50px;
-  position: sticky;
-  top: 4rem;
-  display: none;
-  padding-bottom: 25px;
+#add-button{
+    background: rgb(24, 170, 24);
+    color:white;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
-.all_column_names {
-  background-color: #ffffff;
-  border: 0;
-  border-radius: 0.5rem;
-  box-sizing: border-box;
-  color: #111827;
-  font-family: "Inter var", ui-sans-serif, system-ui, -apple-system, system-ui,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25rem;
-  padding: 0.75rem 1rem;
-  text-align: center;
-  text-decoration: none #d1d5db solid;
-  text-decoration-thickness: auto;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
+
+#all-buttons-container{
+    width: 100%;
+    position:sticky;
+    top:0;
+    gap:8px 8px;
+
 }
 
-.all_column_names:hover {
-  background-color: rgb(249, 250, 251);
+
+
+.all-col-btn{
+    margin: 2px;
+    display: inline;
 }
 
-.all_column_names:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+.remove-button{
+    background: red;
+    color:white;
 }
 
-.all_column_names:focus-visible {
-  box-shadow: none;
+
+
+#combine-button-container{
+    position: sticky;
+    bottom: 0;
+    right:0;
+    padding-top: 5px;
+    text-align: right;
+    padding-bottom: 10px;
 }
 
-.inputclass {
-  /* box-shadow: inset #abacaf 0 0 0 2px;
-  border: 0;
-  background: rgba(0, 0, 0, 0);
-  appearance: none;
-  position: relative;
-  border-radius: 3px;
-  padding: 9px 12px;
-  line-height: 1.4;
-  color: rgb(0, 0, 0);
-  font-size: 16px;
-  font-weight: 400;
-  height: 20px; */
-  padding: 0;
-  height: 30px;
-  position: relative;
-  left: 0;
-  outline: none;
-  border: 1px solid #cdcdcd;
-  border-color: rgba(0, 0, 0, 0.15);
-  background-color: white;
-  font-size: 16px;
+#combine-button{
+    background: rgb(83, 83, 240);
+    color:white;
+    padding: 10px;
+    font-weight: bold;
 }
 
-#combine {
-  position: fixed;
-  bottom: 0px;
-  right: 0px;
-  /* justify-content: flex-end;
-  display: flex; */
-  color: #fff;
-  cursor: pointer;
-  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
-    Ubuntu, sans-serif;
-  
-  display: none;
-  background-color: #405cf5;
-  border-radius: 6px;
-  border-width: 0;
-  box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
-    rgba(50, 50, 93, 0.1) 0 2px 5px 0, rgba(0, 0, 0, 0.07) 0 1px 1px 0;
-  box-sizing: border-box;
-  outline: none;
-  overflow: hidden;
-  padding: 0 25px;
-  height: 44px;
-  
+#add-button-container{
+    width: 89%;
+    padding-top: 5px;
+    bottom:0;
+    display: flex;
+    justify-content: center;
+}
+
+/* Button stuff ends here */
+
+/* Most welcome container related stuff */
+
+#welcome-container{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    flex-direction: column;
+    /* display: none; */
+}
+
+#welcome-header{
+    padding-top: 50px;
+    text-align: center;
+}
+
+#welcome-file-controls{
+    padding-top: 20px;
+    position: relative;
+    /* align-items: center; */
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+#welcome-file-names-display{
+    position: relative;
+    padding-top: 20px;
+    overflow: auto;
+    height: 200px;
+    padding-bottom: 20px;
+
+    /* justify-content: center; */
+}
+#file-names-container{
+    position: absolute;
+    /* height: 100px; */
+    /* background: white; */
+    display: flex;
+    flex-direction: column;
+    left: 25%;
+
+
+
+
+}
+
+#welcome-submit-button-container{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    /* left: 50%; */
+}
+
+#welcome-submit-button{
+    background: rgb(83, 83, 240);
+    color:white;
+    padding: 10px;
+    font-weight: bold;
+}
+
+/* Welcome container ends here */
+
+
+
+#end-container{
+    display:none;
+}
+
+#process-header{
+    padding-top: 30px;
+    padding-left: 5px;
+}
+
+
+#process-container{
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#left-process{
+    width: 65%;
+    flex-grow: 2;
+    position: relative;
+
+
+}
+
+#right-process{
+    /* flex-grow: 1; */
+    width: 35%;
+    position: relative;
+    padding-left: 5px;
+    
+    
+
+}
+
+
+
+
+#inputs-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 75px;
+    gap: 10px 5px;
+}
+
+
+.process-input-field{
+    padding-left: 10px;
+    border-radius: 8px;
+    border-color: rgb(201, 201, 201);
+
 }
