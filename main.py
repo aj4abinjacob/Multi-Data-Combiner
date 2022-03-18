@@ -81,24 +81,23 @@ def finalCombine():
     root = Tk()  # this is to close the dialogue box later
     root.wm_attributes("-topmost", 1)
     root.wm_state("iconic")
-    try:
-        savefile = asksaveasfilename(filetypes=[("All files", "*.*")])
-        print(savefile)
-        if savefile.endswith(".xlsx"):
-            df.to_excel(savefile, index=False)
-        elif savefile.endswith(".xls"):
-            df.to_excel(savefile, index=False)
-        elif savefile.endswith(".tsv"):
-            df.to_csv(savefile, index=False)
-        elif savefile.endswith(".csv"):
-            df.to_csv(savefile, index=False)
-        else:
-            df.to_csv(savefile.split(".")[0] + ".csv", index=False)
-        user_output = f"All files are combined and saved as {savefile}"
 
-    except AttributeError:
-        user_output = "User canceled"
-        print("The user cancelled save")
+    save_file = asksaveasfilename(filetypes=[("All files", "*.*")])
+    if len(save_file) > 0:
+        if save_file.endswith(".xlsx"):
+            df.to_excel(save_file, index=False)
+        elif save_file.endswith(".xls"):
+            df.to_excel(save_file, index=False)
+        elif save_file.endswith(".tsv"):
+            df.to_csv(save_file, index=False)
+        elif save_file.endswith(".csv"):
+            df.to_csv(save_file, index=False)
+        else:
+            df.to_csv(save_file.split(".")[0] + ".csv", index=False)
+        user_output = f"All files are combined and saved as {save_file}"
+
+    else:
+        user_output = "Saving files cancelled"
     root.destroy()
     all_dataframes = pd.DataFrame()
     return user_output

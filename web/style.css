@@ -201,3 +201,40 @@
     border-color: rgb(201, 201, 201);
 
 }
+/* End screen */
+#end-screen{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#end-header-container{
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#end-header{
+    text-align: center;
+}
+
+#end-process-container{
+    /* margin-top: 25px; */
+    text-align: center;
+}
+
+#end-go-back-button-container{
+    margin-top: 75px;
+    text-align: center;
+}
+
+
+
+/* #end-header-container{
+    text-align: center;
+    /* z-index: 2; */
+/* } */ 
+
+/* #end-process-log{
+
+} */
