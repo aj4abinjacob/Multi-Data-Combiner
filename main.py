@@ -59,7 +59,6 @@ all_dataframes = pd.DataFrame()
 
 @eel.expose
 def receiveInputs(file_name, headers_input, column_names):
-    print("Done Combining")
     df = readDf(file_name)
     for index, input in enumerate(column_names):
         for col_input in input.split(","):
