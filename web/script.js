@@ -184,8 +184,16 @@ function sendColumnToInput(column_name) {
 
 column_inputs_container_var = 1;
 inputs_container = document.getElementById("inputs-container");
-
 function addMore() {
+  try{
+    random_tag_popping_out_of_nowhere = document.getElementsByTagName("editor-squiggler")
+  if(random_tag_popping_out_of_nowhere.length > 0){
+    random_tag_popping_out_of_nowhere[0].remove(); }
+  }catch{
+    // pass
+  }
+  
+// inputs_container.remove("ms-editor-squiggles-container"); //this was randomly popping up and causing layout issues
   // adding header input
   header_input = document.createElement("input");
   header_input.setAttribute("type", "input");

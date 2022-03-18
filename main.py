@@ -93,7 +93,8 @@ def finalCombine():
         elif save_file.endswith(".csv"):
             df.to_csv(save_file, index=False)
         else:
-            df.to_csv(save_file.split(".")[0] + ".csv", index=False)
+            save_file = save_file.split(".")[0] + ".csv"
+            df.to_csv(save_file, index=False)
         user_output = f"All files are combined and saved as {save_file}"
 
     else:

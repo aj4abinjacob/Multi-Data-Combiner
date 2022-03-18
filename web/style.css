@@ -190,8 +190,9 @@
 
 #inputs-container{
     display: grid;
-    grid-template-columns: 1fr 1fr 75px;
+    grid-template-columns: 2fr 2fr .75fr;
     gap: 10px 5px;
+    /* position: relative; */
 }
 
 
