@@ -340,11 +340,16 @@ function removeInputDiv(button) {
 }
 
 // actual submit function 
-async function submitFiles(){
+async function submitFiles(one_go = false){
+  if(one_go === true){
+    headers_input = all_column_names;
+    column_names = all_column_names;
+  }
   document.getElementById("process-screen").style.display = "none";
     document.getElementById("end-screen").style.background = "#FFFFFF";
     document.getElementById("end-screen").style.display = "block";
     document.getElementById("end-process-log").textContent = "Starting combining process";
+
     for (let i = 0; i < all_file_names.length; i++) {
       file = all_file_names[i];
       file_status = await eel.receiveInputs(
@@ -400,7 +405,7 @@ async function sendUserInputToPython() {
   checkInput();
   //
   if (cols_same && valid_submit === false){
-      submitFiles();
+      submitFiles(true);
   }else if (valid_submit === false || valid_column_names === false) {
     alert("Please fill all input fields properly");
   } else if (more_than_one_input > 0) {
