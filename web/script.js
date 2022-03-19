@@ -59,7 +59,7 @@ async function getFiles(id) {
     cols_same = (all_cols_length === all_column_names.length) ? "true" : "false";
   }
   cols_same = (cols_same === "true") ? true : false;
-  // console.log(cols_same);
+  console.log(cols_same);
 
 
   // console.log(all_file_names)
@@ -103,8 +103,9 @@ let addColumnsFromPython = function () {
 
 function checkInput(ele = 0) {
   //Auto input 
-  // console.log(current_selection);
+  console.log(current_selection);
   if(ele !== 0 && key_pressed !== "backspace" && current_selection.startsWith("column_names_input")){
+    // console.log(ele.value)
     for (const value of ele.value.split(",")){
       number_of_items_in_all_columns = all_column_names.filter((col)=>col.startsWith(value));
       if (number_of_items_in_all_columns.length === 1){
@@ -152,11 +153,6 @@ function checkInput(ele = 0) {
 function initiateProcessScreen() {
   document.getElementById("welcome-container").style.display = "none";
   document.getElementById("process-screen").style.display = "block";
-  if (cols_same){
-    document.getElementById("cols-same-button").style.display = "inline-block";
-  }else{
-    document.getElementById("cols-same-button").style.display = "none";
-  }
   all_column_names = [...new Set(all_column_names)];
   all_column_names.sort();
   addColumnsFromPython();

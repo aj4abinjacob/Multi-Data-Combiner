@@ -28,15 +28,6 @@
     opacity: .6;
 }
 
-#cols-same-button{
-    display: none;
-    background: #4DFF33;
-    width: 50px;
-    height: 25px;
-    /* border-radius: 50%; */
-
-}
-
 #add-button{
     background: rgb(24, 170, 24);
     color:white;
@@ -53,15 +44,6 @@
 
 }
 
-#cols-same-button{
-    width: 5px;
-    height: 10px;
-    background: #4DFF33;
-    border-radius: 18px;
-    border-width: 0;
-
-    
-}
 
 
 .all-col-btn{
