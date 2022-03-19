@@ -45,12 +45,21 @@ def selectFiles():
         if file.endswith(tuple(extensions)) == False:
             file_names.remove(file)
     all_columns = []
-    for file in file_names:
+    first_df_cols = set()
+    cols_same = 0
+    for index, file in enumerate(file_names):
         df = readDfCols(file)
+        if index == 0:
+            first_df_cols = set(df.columns)
+        elif first_df_cols != set(df.columns):
+            cols_same += 1
         for x in df.columns:
             all_columns.append(x)
+    cols_same = "true" if cols_same != 0 else "false"
+    if len(file_names) == 1:
+        cols_same = "true"
     all_columns = list(dict.fromkeys(all_columns))
-    files_and_columns = [file_names, all_columns]
+    files_and_columns = [file_names, all_columns, cols_same]
     return files_and_columns
 
 

@@ -2,7 +2,8 @@ var inputs_container,
   column_inputs_container_var,
   current_selection,
   all_file_names,
-  more_than_one_input;
+  more_than_one_input,
+  cols_same;
 
 all_file_names = [];
 all_column_names = [];
@@ -34,22 +35,31 @@ function showHideWelcomeButton() {
 }
 
 showHideWelcomeButton();
-
 async function getFiles(id) {
   files_and_columns = await eel.selectFiles()(); // Must prefix call with 'await', otherwise it's the same syntax
   //   console.log("Got this from Python: " + n[0]);
   file_names_container = document.getElementById("file-names-container");
   all_file_names = [...new Set(all_file_names)];
+
   if (id === "browse-button") {
     already_showed_files = [];
     file_names_container.replaceChildren();
     document.getElementById("inputs-container").replaceChildren();
     all_file_names = files_and_columns[0];
     all_column_names = files_and_columns[1];
+    cols_same = files_and_columns[2];
+
+    all_cols_length = all_column_names.length;
+
   } else {
     all_file_names.push(...files_and_columns[0]);
     all_column_names.push(...files_and_columns[1]);
+    all_column_names = [...new Set(all_column_names)]
+    cols_same = (all_cols_length === all_column_names.length) ? "true" : "false";
   }
+  cols_same = (cols_same === "true") ? true : false;
+  console.log(cols_same);
+
 
   // console.log(all_file_names)
   // console.log(all_column_names)
@@ -331,8 +341,30 @@ async function sendUserInputToPython() {
   //check to see if user has entered column input more than once
   checkInput();
   //
+  if (cols_same){
+    document.getElementById("process-screen").style.display = "none";
+    document.getElementById("end-screen").style.background = "#FFFFFF";
+    document.getElementById("end-screen").style.display = "block";
+    document.getElementById("end-process-log").textContent = "Starting combining process";
+    for (let i = 0; i < all_file_names.length; i++) {
+      file = all_file_names[i];
+      file_status = await eel.receiveInputs(
+        file,
+        headers_input,
+        column_names
+      )();
+      document.getElementById("end-process-log").textContent = file_status;
+      }
+      final_status = await eel.finalCombine()();
+    if(final_status=="Saving files cancelled"){
+      document.getElementById("end-process-log").textContent = final_status;
+      document.getElementById("end-screen").style.background = "#FF0000";
+    }else{
+      document.getElementById("end-process-log").textContent = final_status;
+      document.getElementById("end-screen").style.background = "#228B22";
 
-  if (valid_submit === false && valid_column_names === true) {
+    }
+  }else if (valid_submit === false && valid_column_names === true) {
     alert("Please fill all input fields");
   } else if (more_than_one_input > 0) {
     alert("You have entered a column input more than once");
@@ -352,7 +384,7 @@ async function sendUserInputToPython() {
         column_names
       )();
       document.getElementById("end-process-log").textContent = file_status;
-      console.log(file_status);
+      // console.log(file_status);
     }
 
     final_status = await eel.finalCombine()();
