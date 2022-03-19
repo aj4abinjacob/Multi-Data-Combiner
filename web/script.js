@@ -51,14 +51,13 @@ async function getFiles(id) {
     cols_same = files_and_columns[2];
 
     all_cols_length = all_column_names.length;
-
   } else {
     all_file_names.push(...files_and_columns[0]);
     all_column_names.push(...files_and_columns[1]);
-    all_column_names = [...new Set(all_column_names)]
-    cols_same = (all_cols_length === all_column_names.length) ? "true" : "false";
+    all_column_names = [...new Set(all_column_names)];
+    cols_same = all_cols_length === all_column_names.length ? "true" : "false";
   }
-  cols_same = (cols_same === "true") ? true : false;
+  cols_same = cols_same === "true" ? true : false;
 
   // console.log(all_file_names)
   // console.log(all_column_names)
@@ -100,22 +99,42 @@ let addColumnsFromPython = function () {
 //Check Input
 
 function checkInput(ele = 0) {
-  //Auto input 
-  if(ele !== 0 && key_pressed !== "backspace" && current_selection.startsWith("column_names_input")){
+  //Auto input
+  if (
+    ele !== 0 &&
+    key_pressed !== "backspace" &&
+    current_selection.startsWith("column_names_input")
+  ) {
     // console.log(ele.value)
-    for (const value of ele.value.split(",")){
-      number_of_items_in_all_columns = all_column_names.filter((col)=>col.startsWith(value));
-      if (number_of_items_in_all_columns.length === 1){
-        val_suggested = number_of_items_in_all_columns[0]
-        current_input = document.getElementById(current_selection).value.split(",")
-        if(current_input.includes(val_suggested) === false){
-          current_input = current_input.filter(item => item !== value)
-          current_input.push(val_suggested)
-          document.getElementById(current_selection).value = String (current_input);
+    column_inputs_element =
+      document.getElementsByClassName("column-names-input");
+    column_inputs = [];
+    for (let i = 0; i < column_inputs_element.length; i++) {
+      el = column_inputs_element[i].value;
+      el.split(",").forEach((col) => column_inputs.push(col));
+    }
+    column_inputs_to_check = all_column_names.filter(
+      (col) => column_inputs.includes(col) === false
+    );
+    console.log(column_inputs);
+    column_inputs = column_inputs.filter((col) => col);
+    for (const value of ele.value.split(",")) {
+      number_of_items_in_all_columns = column_inputs_to_check.filter((col) =>
+        col.startsWith(value)
+      );
+      if (number_of_items_in_all_columns.length === 1) {
+        val_suggested = number_of_items_in_all_columns[0];
+        current_input = document
+          .getElementById(current_selection)
+          .value.split(",");
+        if (current_input.includes(val_suggested) === false) {
+          current_input = current_input.filter((item) => item !== value);
+          current_input.push(val_suggested);
+          document.getElementById(current_selection).value =
+            String(current_input);
         }
       }
     }
-    
   }
   //
   more_than_one_input = 0;
@@ -150,11 +169,11 @@ function checkInput(ele = 0) {
 function initiateProcessScreen() {
   document.getElementById("welcome-container").style.display = "none";
   document.getElementById("process-screen").style.display = "block";
-  cols_same_button = document.getElementById("cols-same-button")
-  if(cols_same){
+  cols_same_button = document.getElementById("cols-same-button");
+  if (cols_same) {
     cols_same_button.style.background = "#4DFF33";
     cols_same_button.title = "Columns are same on all files";
-  }else{
+  } else {
     cols_same_button.style.background = "#FF0000";
     cols_same_button.title = "Columns are not same on all files";
   }
@@ -220,15 +239,17 @@ function sendColumnToInput(column_name) {
 column_inputs_container_var = 1;
 inputs_container = document.getElementById("inputs-container");
 function addMore() {
-  try{
-    random_tag_popping_out_of_nowhere = document.getElementsByTagName("editor-squiggler")
-  if(random_tag_popping_out_of_nowhere.length > 0){
-    random_tag_popping_out_of_nowhere[0].remove(); }
-  }catch{
+  try {
+    random_tag_popping_out_of_nowhere =
+      document.getElementsByTagName("editor-squiggler");
+    if (random_tag_popping_out_of_nowhere.length > 0) {
+      random_tag_popping_out_of_nowhere[0].remove();
+    }
+  } catch {
     // pass
   }
-  
-// inputs_container.remove("ms-editor-squiggles-container"); //this was randomly popping up and causing layout issues
+
+  // inputs_container.remove("ms-editor-squiggles-container"); //this was randomly popping up and causing layout issues
   // adding header input
   header_input = document.createElement("input");
   header_input.setAttribute("type", "input");
@@ -294,9 +315,9 @@ function addMore() {
 
 // Notice enter key
 function keydown(evt) {
-  if (evt.keyCode === 8){
-    key_pressed = "backspace"
-  }else  if (
+  if (evt.keyCode === 8) {
+    key_pressed = "backspace";
+  } else if (
     evt.shiftKey &&
     evt.keyCode === 13 &&
     document.getElementById("welcome-container").style.display === "none"
@@ -320,8 +341,7 @@ function keydown(evt) {
       next_sibling.focus();
       current_selection = next_sibling.id;
     }
-  }
-  else if(evt.keyCode !== 8){
+  } else if (evt.keyCode !== 8) {
     key_pressed = "not backspace";
   }
 }
@@ -339,37 +359,33 @@ function removeInputDiv(button) {
   }
 }
 
-// actual submit function 
-async function submitFiles(one_go = false){
-  if(one_go === true){
+// actual submit function
+async function submitFiles(one_go = false) {
+  if (one_go === true) {
     headers_input = all_column_names;
     column_names = all_column_names;
   }
   document.getElementById("process-screen").style.display = "none";
-    document.getElementById("end-screen").style.background = "#FFFFFF";
-    document.getElementById("end-screen").style.display = "block";
-    document.getElementById("end-process-log").textContent = "Starting combining process";
+  document.getElementById("end-screen").style.background = "#FFFFFF";
+  document.getElementById("end-screen").style.display = "block";
+  document.getElementById("end-process-log").textContent =
+    "Starting combining process";
 
-    for (let i = 0; i < all_file_names.length; i++) {
-      file = all_file_names[i];
-      file_status = await eel.receiveInputs(
-        file,
-        headers_input,
-        column_names
-      )();
-      document.getElementById("end-process-log").textContent = file_status;
-      // console.log(file_status);
-    }
+  for (let i = 0; i < all_file_names.length; i++) {
+    file = all_file_names[i];
+    file_status = await eel.receiveInputs(file, headers_input, column_names)();
+    document.getElementById("end-process-log").textContent = file_status;
+    // console.log(file_status);
+  }
 
-    final_status = await eel.finalCombine()();
-    if(final_status=="Saving files cancelled"){
-      document.getElementById("end-process-log").textContent = final_status;
-      document.getElementById("end-screen").style.background = "#FF0000";
-    }else{
-      document.getElementById("end-process-log").textContent = final_status;
-      document.getElementById("end-screen").style.background = "#228B22";
-
-    }
+  final_status = await eel.finalCombine()();
+  if (final_status == "Saving files cancelled") {
+    document.getElementById("end-process-log").textContent = final_status;
+    document.getElementById("end-screen").style.background = "#FF0000";
+  } else {
+    document.getElementById("end-process-log").textContent = final_status;
+    document.getElementById("end-screen").style.background = "#228B22";
+  }
 }
 
 // Send user inputs to python
@@ -400,13 +416,12 @@ async function sendUserInputToPython() {
     }
   }
 
-
   //check to see if user has entered column input more than once
   checkInput();
   //
-  if (cols_same && valid_submit === false){
-      submitFiles(true);
-  }else if (valid_submit === false || valid_column_names === false) {
+  if (cols_same && valid_submit === false) {
+    submitFiles(true);
+  } else if (valid_submit === false || valid_column_names === false) {
     alert("Please fill all input fields properly");
   } else if (more_than_one_input > 0) {
     alert("You have entered a column input more than once");
@@ -419,9 +434,7 @@ async function sendUserInputToPython() {
   // final_status = await eel.finalCombine()();
 }
 
-function goBackToProcess(){
+function goBackToProcess() {
   document.getElementById("process-screen").style.display = "block";
   document.getElementById("end-screen").style.display = "none";
-
-
 }
