@@ -59,8 +59,6 @@ async function getFiles(id) {
     cols_same = (all_cols_length === all_column_names.length) ? "true" : "false";
   }
   cols_same = (cols_same === "true") ? true : false;
-  console.log(cols_same);
-
 
   // console.log(all_file_names)
   // console.log(all_column_names)
@@ -103,7 +101,6 @@ let addColumnsFromPython = function () {
 
 function checkInput(ele = 0) {
   //Auto input 
-  console.log(current_selection);
   if(ele !== 0 && key_pressed !== "backspace" && current_selection.startsWith("column_names_input")){
     // console.log(ele.value)
     for (const value of ele.value.split(",")){
@@ -153,6 +150,14 @@ function checkInput(ele = 0) {
 function initiateProcessScreen() {
   document.getElementById("welcome-container").style.display = "none";
   document.getElementById("process-screen").style.display = "block";
+  cols_same_button = document.getElementById("cols-same-button")
+  if(cols_same){
+    cols_same_button.style.background = "#4DFF33";
+    cols_same_button.title = "Columns are same on all files";
+  }else{
+    cols_same_button.style.background = "#FF0000";
+    cols_same_button.title = "Columns are not same on all files";
+  }
   all_column_names = [...new Set(all_column_names)];
   all_column_names.sort();
   addColumnsFromPython();

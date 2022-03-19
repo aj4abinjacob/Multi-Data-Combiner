@@ -20,6 +20,14 @@
     display: none;
 }
 
+#cols-same-button{
+    background: rgb(5, 209, 5);
+    border-radius: 8px;
+    width: 8px;
+    height: 15px;
+    border-width: 0;
+}
+
 .btn:hover{
     opacity: .8;
 }

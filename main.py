@@ -55,7 +55,7 @@ def selectFiles():
             cols_same += 1
         for x in df.columns:
             all_columns.append(x)
-    cols_same = "true" if cols_same != 0 else "false"
+    cols_same = "true" if cols_same == 0 else "false"
     if len(file_names) == 1:
         cols_same = "true"
     all_columns = list(dict.fromkeys(all_columns))
