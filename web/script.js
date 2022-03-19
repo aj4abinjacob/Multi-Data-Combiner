@@ -152,6 +152,11 @@ function checkInput(ele = 0) {
 function initiateProcessScreen() {
   document.getElementById("welcome-container").style.display = "none";
   document.getElementById("process-screen").style.display = "block";
+  if (cols_same){
+    document.getElementById("cols-same-button").style.display = "inline-block";
+  }else{
+    document.getElementById("cols-same-button").style.display = "none";
+  }
   all_column_names = [...new Set(all_column_names)];
   all_column_names.sort();
   addColumnsFromPython();
