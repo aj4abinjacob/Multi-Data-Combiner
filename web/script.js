@@ -309,6 +309,34 @@ function removeInputDiv(button) {
   }
 }
 
+// actual submit function 
+async function submitFiles(){
+  document.getElementById("process-screen").style.display = "none";
+    document.getElementById("end-screen").style.background = "#FFFFFF";
+    document.getElementById("end-screen").style.display = "block";
+    document.getElementById("end-process-log").textContent = "Starting combining process";
+    for (let i = 0; i < all_file_names.length; i++) {
+      file = all_file_names[i];
+      file_status = await eel.receiveInputs(
+        file,
+        headers_input,
+        column_names
+      )();
+      document.getElementById("end-process-log").textContent = file_status;
+      // console.log(file_status);
+    }
+
+    final_status = await eel.finalCombine()();
+    if(final_status=="Saving files cancelled"){
+      document.getElementById("end-process-log").textContent = final_status;
+      document.getElementById("end-screen").style.background = "#FF0000";
+    }else{
+      document.getElementById("end-process-log").textContent = final_status;
+      document.getElementById("end-screen").style.background = "#228B22";
+
+    }
+}
+
 // Send user inputs to python
 
 async function sendUserInputToPython() {
@@ -341,62 +369,17 @@ async function sendUserInputToPython() {
   //check to see if user has entered column input more than once
   checkInput();
   //
-  if (cols_same){
-    document.getElementById("process-screen").style.display = "none";
-    document.getElementById("end-screen").style.background = "#FFFFFF";
-    document.getElementById("end-screen").style.display = "block";
-    document.getElementById("end-process-log").textContent = "Starting combining process";
-    for (let i = 0; i < all_file_names.length; i++) {
-      file = all_file_names[i];
-      file_status = await eel.receiveInputs(
-        file,
-        headers_input,
-        column_names
-      )();
-      document.getElementById("end-process-log").textContent = file_status;
-      }
-      final_status = await eel.finalCombine()();
-    if(final_status=="Saving files cancelled"){
-      document.getElementById("end-process-log").textContent = final_status;
-      document.getElementById("end-screen").style.background = "#FF0000";
-    }else{
-      document.getElementById("end-process-log").textContent = final_status;
-      document.getElementById("end-screen").style.background = "#228B22";
-
-    }
-  }else if (valid_submit === false && valid_column_names === true) {
-    alert("Please fill all input fields");
+  if (cols_same && valid_submit === false){
+      submitFiles();
+  }else if (valid_submit === false || valid_column_names === false) {
+    alert("Please fill all input fields properly");
   } else if (more_than_one_input > 0) {
     alert("You have entered a column input more than once");
   } else if (valid_column_names === false) {
     alert("Please fill column names input field with valid inputs");
     // If checks have passed data will start from here
   } else {
-    document.getElementById("process-screen").style.display = "none";
-    document.getElementById("end-screen").style.background = "#FFFFFF";
-    document.getElementById("end-screen").style.display = "block";
-    document.getElementById("end-process-log").textContent = "Starting combining process";
-    for (let i = 0; i < all_file_names.length; i++) {
-      file = all_file_names[i];
-      file_status = await eel.receiveInputs(
-        file,
-        headers_input,
-        column_names
-      )();
-      document.getElementById("end-process-log").textContent = file_status;
-      // console.log(file_status);
-    }
-
-    final_status = await eel.finalCombine()();
-    if(final_status=="Saving files cancelled"){
-      document.getElementById("end-process-log").textContent = final_status;
-      document.getElementById("end-screen").style.background = "#FF0000";
-    }else{
-      document.getElementById("end-process-log").textContent = final_status;
-      document.getElementById("end-screen").style.background = "#228B22";
-
-    }
-    // alert(final_status);
+    submitFiles();
   }
   // final_status = await eel.finalCombine()();
 }
