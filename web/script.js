@@ -3,6 +3,7 @@ var inputs_container,
   current_selection,
   all_file_names,
   more_than_one_input,
+  key_pressed,
   cols_same;
 
 all_file_names = [];
@@ -100,7 +101,25 @@ let addColumnsFromPython = function () {
 
 //Check Input
 
-function checkInput() {
+function checkInput(ele = 0) {
+  //Auto input 
+  if(ele !== 0 && key_pressed !== "backspace"){
+    // console.log(ele.value)
+    for (const value of ele.value.split(",")){
+      number_of_items_in_all_columns = all_column_names.filter((col)=>col.startsWith(value));
+      if (number_of_items_in_all_columns.length === 1){
+        val_suggested = number_of_items_in_all_columns[0]
+        current_input = document.getElementById(current_selection).value.split(",")
+        if(current_input.includes(val_suggested) === false){
+          current_input = current_input.filter(item => item !== value)
+          current_input.push(val_suggested)
+          document.getElementById(current_selection).value = String (current_input);
+        }
+      }
+    }
+    
+  }
+  //
   more_than_one_input = 0;
   column_names_to_check = document.getElementsByClassName("column-names-input");
   columns_user_has_added = [];
@@ -231,7 +250,7 @@ function addMore() {
     `column_names_input_${column_inputs_container_var}`
   );
   column_names_input.setAttribute("onclick", "setCurrentFocus(this.id)");
-  column_names_input.setAttribute("oninput", "checkInput()");
+  column_names_input.setAttribute("oninput", "checkInput(this)");
   column_names_input.setAttribute(
     "class",
     `column-names-input rm_${column_inputs_container_var} process-input-field`
@@ -269,7 +288,9 @@ function addMore() {
 
 // Notice enter key
 function keydown(evt) {
-  if (
+  if (evt.keyCode === 8){
+    key_pressed = "backspace"
+  }else  if (
     evt.shiftKey &&
     evt.keyCode === 13 &&
     document.getElementById("welcome-container").style.display === "none"
@@ -293,6 +314,9 @@ function keydown(evt) {
       next_sibling.focus();
       current_selection = next_sibling.id;
     }
+  }
+  else if(evt.keyCode !== 8){
+    key_pressed = "not backspace";
   }
 }
 document.onkeydown = keydown;
