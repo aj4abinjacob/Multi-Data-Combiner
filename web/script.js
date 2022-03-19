@@ -103,7 +103,8 @@ let addColumnsFromPython = function () {
 
 function checkInput(ele = 0) {
   //Auto input 
-  if(ele !== 0 && key_pressed !== "backspace"){
+  console.log(current_selection);
+  if(ele !== 0 && key_pressed !== "backspace" && current_selection.startsWith("column_names_input")){
     // console.log(ele.value)
     for (const value of ele.value.split(",")){
       number_of_items_in_all_columns = all_column_names.filter((col)=>col.startsWith(value));
