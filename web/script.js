@@ -251,7 +251,7 @@ function addMore() {
   // adding header input
   header_input = document.createElement("input");
   header_input.setAttribute("type", "input");
-  header_input.setAttribute("placeholder", "Header");
+  header_input.setAttribute("placeholder", "Output Column");
   header_input.setAttribute("oninput", "checkInput()");
   // header_input.setAttribute("onkeydown","addAnotherInput()")
   header_input.setAttribute(
@@ -269,7 +269,7 @@ function addMore() {
   // adding column names
   column_names_input = document.createElement("input");
   column_names_input.setAttribute("type", "input");
-  column_names_input.setAttribute("placeholder", "Column Names");
+  column_names_input.setAttribute("placeholder", "Input Columns");
   column_names_input.setAttribute(
     "id",
     `column_names_input_${column_inputs_container_var}`
