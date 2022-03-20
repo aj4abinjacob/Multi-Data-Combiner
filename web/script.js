@@ -105,7 +105,6 @@ function checkInput(ele = 0) {
     key_pressed !== "backspace" &&
     current_selection.startsWith("column_names_input")
   ) {
-    // console.log(ele.value)
     column_inputs_element =
       document.getElementsByClassName("column-names-input");
     column_inputs = [];
@@ -116,7 +115,6 @@ function checkInput(ele = 0) {
     column_inputs_to_check = all_column_names.filter(
       (col) => column_inputs.includes(col) === false
     );
-    console.log(column_inputs);
     column_inputs = column_inputs.filter((col) => col);
     for (const value of ele.value.split(",")) {
       number_of_items_in_all_columns = column_inputs_to_check.filter((col) =>
@@ -390,7 +388,7 @@ async function submitFiles(one_go = false) {
 
 // Send user inputs to python
 
-async function sendUserInputToPython() {
+function sendUserInputToPython() {
   column_names_elements = document.getElementsByClassName("column-names-input");
   column_names = [];
   for (let i = 0; i < column_names_elements.length; i++) {
@@ -415,11 +413,17 @@ async function sendUserInputToPython() {
       }
     }
   }
+  //Check to ensure no value has been entered
+  all_user_inputs = document.getElementsByClassName("process-input-field");
+  number_of_all_user_inputs = 0;
+  for (const el of all_user_inputs) {
+    if (el.value.length > 0) number_of_all_user_inputs++;
+  }
 
   //check to see if user has entered column input more than once
   checkInput();
   //
-  if (cols_same && valid_submit === false) {
+  if (cols_same && valid_submit === false && number_of_all_user_inputs == 0) {
     submitFiles(true);
   } else if (valid_submit === false || valid_column_names === false) {
     alert("Please fill all input fields properly");
