@@ -307,6 +307,24 @@ function addMore() {
   column_inputs_container_var++;
 }
 
+function addAllColumns() {
+  if (cols_same) {
+    for (let i = 0; i < all_column_names.length; i++) {
+      column = all_column_names[i];
+      document.getElementById(
+        `column_names_input_${column_inputs_container_var - 1}`
+      ).value = column;
+      document.getElementById(
+        `header_input_${column_inputs_container_var - 1}`
+      ).value = column;
+      if (i < all_column_names.length - 1) {
+        addMore();
+      }
+    }
+    checkInput();
+  }
+}
+
 // Notice enter key
 function keydown(evt) {
   if (evt.keyCode === 8) {
