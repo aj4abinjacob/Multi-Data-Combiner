@@ -122,7 +122,7 @@ except Exception as e:
         except Exception as e:
             try:
                 eel.start("index.html",mode="firefox")
-            except:
+            except Exception as e:
                 root = Tk()
                 root.geometry("100x200")
                 root.wm_attributes("-topmost", 1)
