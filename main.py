@@ -1,13 +1,12 @@
-from fileinput import filename
 from tkinter.filedialog import asksaveasfilename
 from tkinter.filedialog import askopenfilenames
 import eel
 from numpy import absolute
 import pandas as pd
-import os
-import pathlib
 import numpy
 from tkinter import Tk
+from tkinter import Label
+import time
 
 
 def readDf(file):
@@ -114,5 +113,20 @@ def finalCombine():
 
 eel.init("web")
 
-
-eel.start("index.html", size=(1000, 600))
+try:
+    eel.start("index.html", size=(1000, 600))
+except:
+    try:
+        eel.start("index.html",mode="edge")
+    except:
+        try:
+            eel.start("index.html",mode="firefox")
+        except:
+            root = Tk()
+            w = Label(root, text='No compatible browsers found!')
+            w.pack()
+            root.mainloop()
+            time.sleep(2)
+            root.destroy()
+            exit()
+            
