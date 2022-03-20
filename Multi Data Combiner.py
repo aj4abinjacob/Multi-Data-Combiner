@@ -115,18 +115,21 @@ eel.init("web")
 
 try:
     eel.start("index.html", size=(1000, 600))
-except:
-    try:
-        eel.start("index.html",mode="edge")
-    except:
+except Exception as e:
+    if str(e) == "Can't find Google Chrome/Chromium installation":
         try:
-            eel.start("index.html",mode="firefox")
-        except:
-            root = Tk()
-            w = Label(root, text='No compatible browsers found!')
-            w.pack()
-            root.mainloop()
-            time.sleep(2)
-            root.destroy()
-            exit()
-            
+            eel.start("index.html",mode="edge")
+        except Exception as e:
+            try:
+                eel.start("index.html",mode="firefox")
+            except:
+                root = Tk()
+                root.geometry("100x200")
+                root.wm_attributes("-topmost", 1)
+                w = Label(root, text='No compatible browsers found!')
+                w.pack()
+                root.mainloop()
+                time.sleep(2)
+                root.destroy()
+                exit()
+

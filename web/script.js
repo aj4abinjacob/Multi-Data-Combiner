@@ -59,12 +59,8 @@ async function getFiles(id) {
   }
   cols_same = cols_same === "true" ? true : false;
 
-  // console.log(all_file_names)
-  // console.log(all_column_names)
-
   // Show file names received
-  for (let i = 0; i < all_file_names.length; i++) {
-    file_name = all_file_names[i];
+  for (const file_name of all_file_names) {
     if (already_showed_files.includes(file_name) == false) {
       file_name_element = document.createElement("p");
       file_name_element.textContent = `${
