@@ -53,6 +53,8 @@ async function getFiles(id) {
     same_cols_on_all_files = files_and_columns[3];
     all_cols_length = all_column_names.length;
   } else {
+    same_cols_on_all_files = same_cols_on_all_files.filter((value) => files_and_columns[1].includes(value));
+    same_cols_on_all_files.sort();
     all_file_names.push(...files_and_columns[0]);
     all_column_names.push(...files_and_columns[1]);
     all_column_names = [...new Set(all_column_names)];
@@ -310,6 +312,7 @@ function addMore() {
 
 function addAllColumns() {
   cols_to_fill = cols_same ? all_column_names : same_cols_on_all_files;
+  // console.log(same_cols_on_all_files)
   for (let i = 0; i < cols_to_fill.length; i++) {
     column = cols_to_fill[i];
     document.getElementById(
