@@ -312,6 +312,9 @@ function addMore() {
 
 function addAllColumns() {
   cols_to_fill = cols_same ? all_column_names : same_cols_on_all_files;
+  input_field = document.getElementsByClassName("process-input-field")
+  last_input_field = input_field[input_field.length - 1]
+  column_inputs_container_var = getOnlyNumber(last_input_field.id) + 1;
   // console.log(same_cols_on_all_files)
   for (let i = 0; i < cols_to_fill.length; i++) {
     column = cols_to_fill[i];
