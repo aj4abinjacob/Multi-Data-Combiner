@@ -4,6 +4,7 @@ var inputs_container,
   all_file_names,
   more_than_one_input,
   key_pressed,
+  same_cols_on_all_files,
   cols_same;
 
 all_file_names = [];
@@ -49,7 +50,7 @@ async function getFiles(id) {
     all_file_names = files_and_columns[0];
     all_column_names = files_and_columns[1];
     cols_same = files_and_columns[2];
-
+    same_cols_on_all_files = files_and_columns[3];
     all_cols_length = all_column_names.length;
   } else {
     all_file_names.push(...files_and_columns[0]);
@@ -308,21 +309,21 @@ function addMore() {
 }
 
 function addAllColumns() {
-  if (cols_same) {
-    for (let i = 0; i < all_column_names.length; i++) {
-      column = all_column_names[i];
-      document.getElementById(
-        `column_names_input_${column_inputs_container_var - 1}`
-      ).value = column;
-      document.getElementById(
-        `header_input_${column_inputs_container_var - 1}`
-      ).value = column;
-      if (i < all_column_names.length - 1) {
-        addMore();
-      }
+  cols_to_fill = cols_same ? all_column_names : same_cols_on_all_files;
+  for (let i = 0; i < cols_to_fill.length; i++) {
+    column = cols_to_fill[i];
+    document.getElementById(
+      `column_names_input_${column_inputs_container_var - 1}`
+    ).value = column;
+    document.getElementById(
+      `header_input_${column_inputs_container_var - 1}`
+    ).value = column;
+    if (i < all_column_names.length - 1) {
+      addMore();
     }
-    checkInput();
   }
+  checkInput();
+
 }
 
 // Notice enter key

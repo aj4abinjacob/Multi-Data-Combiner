@@ -44,10 +44,12 @@ def selectFiles():
         if file.endswith(tuple(extensions)) == False:
             file_names.remove(file)
     all_columns = []
+    df_columns_list = []
     first_df_cols = set()
     cols_same = 0
     for index, file in enumerate(file_names):
         df = readDfCols(file)
+        df_columns_list.append(set(df.columns))
         if index == 0:
             first_df_cols = set(df.columns)
         elif first_df_cols != set(df.columns):
@@ -58,7 +60,8 @@ def selectFiles():
     if len(file_names) == 1:
         cols_same = "true"
     all_columns = list(dict.fromkeys(all_columns))
-    files_and_columns = [file_names, all_columns, cols_same]
+    same_col_list = list(set.intersection(*df_columns_list))
+    files_and_columns = [file_names, all_columns, cols_same, same_col_list]
     return files_and_columns
 
 
@@ -118,18 +121,17 @@ try:
 except Exception as e:
     if str(e) == "Can't find Google Chrome/Chromium installation":
         try:
-            eel.start("index.html",mode="edge")
+            eel.start("index.html", mode="edge")
         except Exception as e:
             try:
-                eel.start("index.html",mode="firefox")
+                eel.start("index.html", mode="firefox")
             except Exception as e:
                 root = Tk()
                 root.geometry("100x200")
                 root.wm_attributes("-topmost", 1)
-                w = Label(root, text='No compatible browsers found!')
+                w = Label(root, text="No compatible browsers found!")
                 w.pack()
                 root.mainloop()
                 time.sleep(2)
                 root.destroy()
                 exit()
-
