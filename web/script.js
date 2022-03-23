@@ -24,6 +24,18 @@ function count(arr) {
   );
 }
 
+function deleteSquiggler(){
+  try {
+    random_tag_popping_out_of_nowhere =
+      document.getElementsByTagName("editor-squiggler");
+    if (random_tag_popping_out_of_nowhere.length > 0) {
+      random_tag_popping_out_of_nowhere[0].remove();
+    }
+  } catch {
+    // pass
+  }
+}
+
 //Disable browse button and submit button during initial window
 function showHideWelcomeButton() {
   if (already_showed_files.length === 0) {
@@ -132,6 +144,7 @@ function checkInput(ele = 0) {
         }
       }
     }
+    deleteSquiggler();
   }
   //
   more_than_one_input = 0;
@@ -236,16 +249,7 @@ function sendColumnToInput(column_name) {
 column_inputs_container_var = 1;
 inputs_container = document.getElementById("inputs-container");
 function addMore() {
-  try {
-    random_tag_popping_out_of_nowhere =
-      document.getElementsByTagName("editor-squiggler");
-    if (random_tag_popping_out_of_nowhere.length > 0) {
-      random_tag_popping_out_of_nowhere[0].remove();
-    }
-  } catch {
-    // pass
-  }
-
+  deleteSquiggler();
   // inputs_container.remove("ms-editor-squiggles-container"); //this was randomly popping up and causing layout issues
   // adding header input
   header_input = document.createElement("input");
