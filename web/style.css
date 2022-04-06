@@ -1,13 +1,14 @@
 @import url("https://fonts.googleapis.com/css?family=Cabin:400,500,700|Montserrat:400,500,700");
-*{
-    margin:0;
+
+* {
+    margin: 0;
     font-family: "Cabin", sans-serif;
 }
 
 
 /* Button Stuff */
 
-.btn{
+.btn {
     padding: 8px;
     cursor: pointer;
     border-radius: 8px;
@@ -16,11 +17,11 @@
     transition: opacity .25s;
 }
 
-#process-screen{
+#process-screen {
     display: none;
 }
 
-#cols-same-button{
+#cols-same-button {
     background: rgb(5, 209, 5);
     border-radius: 8px;
     width: 8px;
@@ -28,64 +29,64 @@
     border-width: 0;
 }
 
-.btn:hover{
+.btn:hover {
     opacity: .8;
 }
 
-.btn:active{
+.btn:active {
     opacity: .6;
 }
 
-#add-button{
+#add-button {
     background: rgb(24, 170, 24);
-    color:white;
+    color: white;
     padding-left: 10px;
     padding-right: 10px;
 }
 
 
-#all-buttons-container{
+#all-buttons-container {
     width: 100%;
-    position:sticky;
-    top:0;
-    gap:8px 8px;
+    position: sticky;
+    top: 0;
+    gap: 8px 8px;
 
 }
 
 
 
-.all-col-btn{
+.all-col-btn {
     margin: 2px;
     display: inline;
 }
 
-.remove-button{
+.remove-button {
     background: red;
-    color:white;
+    color: white;
 }
 
 
 
-#combine-button-container{
+#combine-button-container {
     position: sticky;
     bottom: 0;
-    right:0;
+    right: 0;
     padding-top: 5px;
     text-align: right;
     padding-bottom: 10px;
 }
 
-#combine-button{
+#combine-button {
     background: rgb(83, 83, 240);
-    color:white;
+    color: white;
     padding: 10px;
     font-weight: bold;
 }
 
-#add-button-container{
+#add-button-container {
     width: 89%;
     padding-top: 5px;
-    bottom:0;
+    bottom: 0;
     display: flex;
     justify-content: center;
 }
@@ -94,7 +95,7 @@
 
 /* Most welcome container related stuff */
 
-#welcome-container{
+#welcome-container {
     display: flex;
     height: 100vh;
     width: 100vw;
@@ -103,12 +104,12 @@
     /* display: none; */
 }
 
-#welcome-header{
+#welcome-header {
     padding-top: 50px;
     text-align: center;
 }
 
-#welcome-file-controls{
+#welcome-file-controls {
     padding-top: 20px;
     position: relative;
     /* align-items: center; */
@@ -117,7 +118,7 @@
     justify-content: center;
 }
 
-#welcome-file-names-display{
+#welcome-file-names-display {
     position: relative;
     padding-top: 20px;
     overflow: auto;
@@ -126,7 +127,8 @@
 
     /* justify-content: center; */
 }
-#file-names-container{
+
+#file-names-container {
     position: absolute;
     /* height: 100px; */
     /* background: white; */
@@ -139,16 +141,16 @@
 
 }
 
-#welcome-submit-button-container{
+#welcome-submit-button-container {
     position: relative;
     display: flex;
     justify-content: center;
     /* left: 50%; */
 }
 
-#welcome-submit-button{
+#welcome-submit-button {
     background: rgb(83, 83, 240);
-    color:white;
+    color: white;
     padding: 10px;
     font-weight: bold;
 }
@@ -157,17 +159,17 @@
 
 
 
-#end-container{
-    display:none;
+#end-container {
+    display: none;
 }
 
-#process-header{
+#process-header {
     padding-top: 30px;
     padding-left: 5px;
 }
 
 
-#process-container{
+#process-container {
     padding-top: 10px;
     display: flex;
     flex-direction: row;
@@ -175,7 +177,7 @@
     padding-right: 10px;
 }
 
-#left-process{
+#left-process {
     width: 65%;
     flex-grow: 2;
     position: relative;
@@ -183,20 +185,20 @@
 
 }
 
-#right-process{
+#right-process {
     /* flex-grow: 1; */
     width: 35%;
     position: relative;
     padding-left: 5px;
-    
-    
+
+
 
 }
 
 
 
 
-#inputs-container{
+#inputs-container {
     display: grid;
     grid-template-columns: 2fr 2fr .75fr;
     gap: 10px 5px;
@@ -204,35 +206,42 @@
 }
 
 
-.process-input-field{
+.process-input-field {
     padding-left: 10px;
     border-radius: 8px;
     border-color: rgb(201, 201, 201);
 
 }
+
+/* Pre process screen */
+#pre-process-screen {
+    display: none;
+}
+
+
 /* End screen */
-#end-screen{
+#end-screen {
     display: none;
     position: absolute;
     width: 100%;
     height: 100%;
 }
 
-#end-header-container{
+#end-header-container {
     margin-top: 50px;
     margin-bottom: 50px;
 }
 
-#end-header{
+#end-header {
     text-align: center;
 }
 
-#end-process-container{
+#end-process-container {
     /* margin-top: 25px; */
     text-align: center;
 }
 
-#end-go-back-button-container{
+#end-go-back-button-container {
     margin-top: 75px;
     text-align: center;
 }
@@ -242,7 +251,7 @@
 /* #end-header-container{
     text-align: center;
     /* z-index: 2; */
-/* } */ 
+/* } */
 
 /* #end-process-log{
 

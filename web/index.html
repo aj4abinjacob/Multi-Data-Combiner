@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Welcome Container -->
     <div id="welcome-container">
@@ -21,16 +23,17 @@
             <div id="file-names-container"></div>
         </div>
         <div id="welcome-submit-button-container">
-            <input type="button" value="Submit" id="welcome-submit-button" class="btn" onclick="initiateProcessScreen()">
+            <input type="button" value="Submit" id="welcome-submit-button" class="btn"
+                onclick="initiateProcessScreen()">
         </div>
     </div>
     <!-- Welcome container ends here -->
     <div id="process-screen">
         <div id="process-header">
-        <h1 style="display:inline-block">Multi Data Combiner</h1>
-        <div id="back-button-container" style="display:absolute; text-align:right; padding-right: 10px;">
-            <input type="button" value="Go Back" class="btn" id="back-button" onclick="goBack()">
-        </div>
+            <h1 style="display:inline-block">Multi Data Combiner</h1>
+            <div id="back-button-container" style="display:absolute; text-align:right; padding-right: 10px;">
+                <input type="button" value="Go Back" class="btn" id="back-button" onclick="goBack()">
+            </div>
         </div>
         <div id="process-container">
             <div id="left-process">
@@ -38,7 +41,7 @@
                 <div id="inputs-container">
                     <!-- User inputs will be contained here -->
                 </div>
-        
+
                 <div id="add-button-container">
                     <input type="button" value="Add" id="add-button" class="btn" onclick="addMore()">
                 </div>
@@ -50,27 +53,37 @@
                 <div id="all-buttons-container">
                     <div id="column-names-container"></div>
                     <div id="combine-button-container">
-                        <input type="button" value="Combine" id="combine-button" class="btn" onclick="sendUserInputToPython()">
-                    </div> 
-                </div>    
+                        <input type="button" value="Combine" id="combine-button" class="btn"
+                            onclick="sendUserInputToPython()">
+                    </div>
+                </div>
             </div>
             <!-- right process div ends here -->
         </div>
     </div>
-        <!-- process div ends here -->
+    <!-- process div ends here -->
+    <div id="pre-process-screen">
+        <div>
+            <h1>Multi Data Combiner</h1>
+        </div>
+        <div id="pre-process-container">
+
+        </div>
+    </div>
     <div id="end-screen">
         <div id="end-header-container">
             <h1 id="end-header">Multi Data Combiner</h1>
         </div>
         <div id="end-process-container">
-            <h2 id="end-process-log"></h2>            
+            <h2 id="end-process-log"></h2>
         </div>
         <div id="end-go-back-button-container">
             <input type="button" value="Go Back" id="end-go-back-button" class="btn" onclick="goBackToProcess()">
         </div>
     </div>
-    
-<script type = "text/javascript" src="script.js"></script> 
-<script type = "text/javascript" src="/eel.js"></script> 
+
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="/eel.js"></script>
 </body>
+
 </html>
