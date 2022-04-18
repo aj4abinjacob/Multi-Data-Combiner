@@ -218,6 +218,15 @@
     display: none;
 }
 
+#pre-pro-add-button {}
+
+#pre-pro-check-box {
+    display: none;
+}
+
+#pre-check-text {
+    display: none;
+}
 
 /* End screen */
 #end-screen {

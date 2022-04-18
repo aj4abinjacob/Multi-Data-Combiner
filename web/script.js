@@ -3,7 +3,7 @@ var inputs_container,
   current_selection,
   all_file_names,
   more_than_one_input,
-  key_pressed,
+  key_pressed, selected_action,
   same_cols_on_all_files,
   cols_same;
 
@@ -24,7 +24,7 @@ function count(arr) {
   );
 }
 
-function deleteSquiggler(){
+function deleteSquiggler() {
   try {
     random_tag_popping_out_of_nowhere =
       document.getElementsByTagName("editor-squiggler");
@@ -78,9 +78,8 @@ async function getFiles(id) {
   for (const file_name of all_file_names) {
     if (already_showed_files.includes(file_name) == false) {
       file_name_element = document.createElement("p");
-      file_name_element.textContent = `${
-        already_showed_files.length + 1
-      }. ${file_name}`;
+      file_name_element.textContent = `${already_showed_files.length + 1
+        }. ${file_name}`;
       file_names_container.appendChild(file_name_element);
       already_showed_files.push(file_name);
     }
@@ -408,6 +407,23 @@ async function submitFiles(one_go = false) {
   } else {
     document.getElementById("end-process-log").textContent = final_status;
     document.getElementById("end-screen").style.background = "#228B22";
+  }
+}
+
+
+// Pre process screen elements adder
+function selectAction(sel) {
+  selected_action = sel.options[sel.selectedIndex].text
+}
+
+function addAction() {
+  sub_pre_process = document.getElementById("sub-pre-process")
+  alert(selected_action)
+  if (selected_action === "Remove Duplicates") {
+    remove_dup_inputs = document.createElement("input")
+    remove_dup_inputs.setAttribute("id", "remove-dup-inputs")
+    remove_dup_inputs.setAttribute("placeholder", "Write columns to be considered for removing duplicates")
+    sub_pre_process.appendChild(remove_dup_inputs)
   }
 }
 
