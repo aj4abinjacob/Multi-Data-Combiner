@@ -382,7 +382,7 @@ function removeInputDiv(button) {
 }
 
 // actual submit function
-async function submitFiles(one_go = false) {
+async function submitFiles(one_go = false, clean_actions) {
   if (one_go === true) {
     headers_input = all_column_names;
     column_names = all_column_names;
@@ -400,7 +400,7 @@ async function submitFiles(one_go = false) {
     // console.log(file_status);
   }
 
-  final_status = await eel.finalCombine()();
+  final_status = await eel.finalCombine(clean_actions)();
   if (final_status == "Saving files cancelled") {
     document.getElementById("end-process-log").textContent = final_status;
     document.getElementById("end-screen").style.background = "#FF0000";
@@ -452,9 +452,23 @@ function addAction() {
     sub_pre_process.appendChild(remove_dup_head)
     sub_pre_process.appendChild(remove_dup_inputs)
     main_pre_process.appendChild(sub_pre_process)
-
+  } else if (selected_action === "Remove Blank Rows") {
+    sub_pre_process = document.createElement("div")
+    sub_pre_process.setAttribute("class", "sub-pre-process")
+    remove_dup_head = document.createElement("h3")
+    remove_dup_head.innerHTML = "Remove Blank Rows"
+    remove_dup_inputs = document.createElement("input")
+    remove_dup_inputs.setAttribute("id", "remove-blank-inputs")
+    remove_dup_inputs.setAttribute("class", "pre-process-input-field rbr-pp")
+    remove_dup_inputs.setAttribute("size", "20")
+    remove_dup_inputs.setAttribute("placeholder", "Write columns to be considered for removing blanks")
+    sub_pre_process.appendChild(remove_dup_head)
+    sub_pre_process.appendChild(remove_dup_inputs)
+    main_pre_process.appendChild(sub_pre_process)
   }
 }
+
+
 function checkBoxCheck() {
   pre_check_box = document.getElementById("pre-pro-check-box")
   if (pre_check_box.checked) {
@@ -479,9 +493,24 @@ function getHeadersInput() {
 
 function sendUserInputToPython(but) {
   if (but.value === "Combine") {
+    // Check values from pre-process
     if (but.classList.contains("pre-pro-combine")) {
-      rm = document.getElementsByClassName("rmd-pp")[0]
-      console.log(rm.value)
+      pass_clean_actions = []
+      sub_pre_process = document.getElementsByClassName("sub-pre-process")
+      for (const ele of sub_pre_process) {
+        // console.log(ele)
+        if (ele.firstChild.innerHTML === "Remove Duplicates") {
+          rem_values = ele.childNodes[1]
+          // console.log(`${rem_values.value}`)
+          pass_clean_actions.push(`rmd896#${rem_values.value}`)
+        } else if (ele.firstChild.innerHTML === "Remove Blank Rows") {
+          rem_values = ele.childNodes[1]
+          // console.log(`${rem_values.value}`)
+          pass_clean_actions.push(`rnr896#${rem_values.value}`)
+        }
+      }
+      // rm = document.getElementsByClassName("rmd-pp")[0]
+      // console.log(rm.value)
     }
     column_names_elements = document.getElementsByClassName("column-names-input");
     column_names = [];
@@ -514,7 +543,7 @@ function sendUserInputToPython(but) {
     checkInput();
     //
     if (cols_same && valid_submit === false && number_of_all_user_inputs == 0) {
-      submitFiles(true);
+      submitFiles(true, pass_clean_actions);
     } else if (valid_submit === false || valid_column_names === false) {
       alert("Please fill all input fields properly");
     } else if (more_than_one_input > 0) {
@@ -523,7 +552,7 @@ function sendUserInputToPython(but) {
       alert("Please fill column names input field with valid inputs");
       // If checks have passed data will start from here
     } else {
-      submitFiles();
+      submitFiles(false, pass_clean_actions);
     }
   } else {
     document.getElementById("process-screen").style.display = "none";

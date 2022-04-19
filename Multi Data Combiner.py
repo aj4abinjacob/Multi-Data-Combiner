@@ -9,6 +9,24 @@ from tkinter import Label
 import time
 
 
+# File Cleaning
+def removeDuplicates(df, cols):
+    for x in cols:
+        if x not in df.columns:
+            cols.remove(x)
+    df = df.drop_duplicates(subset=cols)
+    return df
+
+
+# Delete Null Rows
+def delNullRows(df, columns):
+    df = df.dropna(subset=columns)
+    return df
+
+
+#
+
+
 def readDf(file):
     if file.endswith(".csv") or file.endswith(".tsv"):
         df = pd.read_csv(file, low_memory=False)
@@ -85,9 +103,20 @@ def receiveInputs(file_name, headers_input, column_names):
 
 
 @eel.expose
-def finalCombine():
+def finalCombine(clean_actions):
     global all_dataframes
     df = all_dataframes
+    for action in clean_actions:
+        # Removing duplicates
+        if action.startswith("rmd896#"):
+            action = action[7:]
+            action = action.split(",")
+            df = removeDuplicates(df, action)
+        elif action.startswith("rnr896#"):
+            action = action[7:]
+            action = action.split(",")
+            df = delNullRows(df, action)
+
     root = Tk()  # this is to close the dialogue box later
     root.wm_attributes("-topmost", 1)
     root.wm_state("iconic")
