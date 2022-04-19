@@ -91,7 +91,6 @@ def finalCombine():
     root = Tk()  # this is to close the dialogue box later
     root.wm_attributes("-topmost", 1)
     root.wm_state("iconic")
-
     save_file = asksaveasfilename(filetypes=[("All files", "*.*")])
     if len(save_file) > 0:
         if save_file.endswith(".xlsx"):

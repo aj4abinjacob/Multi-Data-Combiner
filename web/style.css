@@ -218,15 +218,53 @@
     display: none;
 }
 
-#pre-pro-add-button {}
-
-#pre-pro-check-box {
-    display: none;
+#pre-process-container {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
-#pre-check-text {
-    display: none;
+#left-pre-process {
+    width: 65%;
+    flex-grow: 2;
+    position: relative;
 }
+
+#right-pre-process {
+    width: 35%;
+    position: relative;
+    padding-left: 5px;
+}
+
+#remove-dup-inputs {
+    display: block;
+}
+
+.sub-pre-process {
+    display: grid;
+    flex-grow: 1;
+    justify-content: center;
+    margin-bottom: 10px;
+
+}
+
+.pre-process-input-field {
+    font-size: 11pt;
+    width: 200px;
+    padding-left: 10px;
+    border-radius: 8px;
+    border-color: rgb(201, 201, 201);
+}
+
+.selected-columns {
+    background: #FFD700;
+}
+
+
+/* Pre process screen ends here */
+
 
 /* End screen */
 #end-screen {

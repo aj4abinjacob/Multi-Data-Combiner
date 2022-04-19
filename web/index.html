@@ -53,11 +53,11 @@
                 <div id="all-buttons-container">
                     <div id="column-names-container"></div>
                     <div id="combine-button-container">
-                        <input type="checkbox" id="pre-pro-check-box" name="pre-pro-check-box"
-                            value="pre-pro-check-box">
+                        <input type="checkbox" id="pre-pro-check-box" name="pre-pro-check-box" value="pre-pro-check-box"
+                            onclick="checkBoxCheck()" )>
                         <label for="pre-pro-check-box" id="pre-check-text"> Apply Pre Processing </label>
                         <input type="button" value="Combine" id="combine-button" class="btn"
-                            onclick="sendUserInputToPython()">
+                            onclick="sendUserInputToPython(this)">
                     </div>
                 </div>
             </div>
@@ -66,22 +66,35 @@
     </div>
     <!-- process div ends here -->
     <div id="pre-process-screen">
-        <div>
-            <h1>Multi Data Combiner</h1>
+        <div id="pre-process-header">
+            <h1 style="display:inline-block">Multi Data Combiner</h1>
+            <div id="back-button-container" style="display:absolute; text-align:right; padding-right: 10px;">
+                <input type="button" value="Go Back" class="btn" id="back-button" onclick="goBackToProcess()">
+            </div>
         </div>
         <div id="pre-process-container">
-            <div id="sub-pre-process"></div>
-            <div id="pre-process-controls">
-                <select name="action" id="action" onChange="selectAction(this)">
-                    <option hidden disabled selected value> -- select an option -- </option>
-                    <option value="rmd">Remove Duplicates</option>
-                    <option value="rpv">Replace Values</option>
-                    <option value="rspc">Remove Special Characters</option>
-                    <option value="inv">Insert Values</option>
-                </select>
-                <input type="button" value="Add" id="pre-pro-add-button" class="btn" onclick="addAction()">
-
+            <div id="left-pre-process">
+                <div id="main-pre-process"></div>
+                <div id="pre-process-controls">
+                    <select name="action" id="action" onChange="selectAction(this)">
+                        <option hidden disabled selected value> -- select an option -- </option>
+                        <option value="rmd">Remove Duplicates</option>
+                        <option value="rpv">Replace Values</option>
+                        <option value="rspc">Remove Special Characters</option>
+                        <option value="inv">Insert Values</option>
+                    </select>
+                    <input type="button" value="Add" id="pre-pro-add-button" class="btn" onclick="addAction()">
+                </div>
             </div>
+            <div id="right-pre-process">
+                <h3>Selected Columns</h3>
+                <div id="pre-process-selected-columns"></div>
+            </div>
+
+        </div>
+        <div id="combine-button-container">
+            <input type="button" value="Combine" id="combine-button" class="btn pre-pro-combine"
+                onclick="sendUserInputToPython(this)">
         </div>
     </div>
     <div id="end-screen">

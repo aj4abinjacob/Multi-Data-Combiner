@@ -416,70 +416,130 @@ function selectAction(sel) {
   selected_action = sel.options[sel.selectedIndex].text
 }
 
+function addSelectedColumns() {
+  headers_input = getHeadersInput();
+
+  selected_column_container_div = document.getElementById("pre-process-selected-columns");
+  selected_column_container_div.replaceChildren();
+  // Add column names button received from python
+  for (let i = 0; i < headers_input.length; i++) {
+    column_name = headers_input[i];
+    column_button = document.createElement("input");
+    column_button.setAttribute("type", "button");
+    column_button.setAttribute("value", column_name);
+    column_button.setAttribute(
+      "class",
+      "all-column-names-button btn all-col-btn selected-columns"
+    );
+    column_button.setAttribute("id", `sel_button_id_${column_name}`);
+    // column_button.setAttribute("onclick", "sendColumnToInput(this.value)");
+    selected_column_container_div.appendChild(column_button);
+  }
+};
+
 function addAction() {
-  sub_pre_process = document.getElementById("sub-pre-process")
-  alert(selected_action)
+  main_pre_process = document.getElementById("main-pre-process")
   if (selected_action === "Remove Duplicates") {
+    sub_pre_process = document.createElement("div")
+    sub_pre_process.setAttribute("class", "sub-pre-process")
+    remove_dup_head = document.createElement("h3")
+    remove_dup_head.innerHTML = "Remove Duplicates"
     remove_dup_inputs = document.createElement("input")
     remove_dup_inputs.setAttribute("id", "remove-dup-inputs")
+    remove_dup_inputs.setAttribute("class", "pre-process-input-field rmd-pp")
+    remove_dup_inputs.setAttribute("size", "20")
     remove_dup_inputs.setAttribute("placeholder", "Write columns to be considered for removing duplicates")
+    sub_pre_process.appendChild(remove_dup_head)
     sub_pre_process.appendChild(remove_dup_inputs)
+    main_pre_process.appendChild(sub_pre_process)
+
+  }
+}
+function checkBoxCheck() {
+  pre_check_box = document.getElementById("pre-pro-check-box")
+  if (pre_check_box.checked) {
+    document.getElementById("combine-button").value = "Next";
+  } else {
+    document.getElementById("combine-button").value = "Combine";
   }
 }
 
-// Send user inputs to python
-
-function sendUserInputToPython() {
-  column_names_elements = document.getElementsByClassName("column-names-input");
-  column_names = [];
-  for (let i = 0; i < column_names_elements.length; i++) {
-    column_names.push(column_names_elements[i].value);
-  }
+// Get header inputs
+function getHeadersInput() {
   headers_input_elements = document.getElementsByClassName("headers-input");
   headers_input = [];
   for (let i = 0; i < headers_input_elements.length; i++) {
     headers_input.push(headers_input_elements[i].value);
   }
-  all_file_names = [...new Set(all_file_names)];
-  valid_submit = true;
-  valid_column_names = true;
-  for (let i = 0; i < column_names.length; i++) {
-    if (headers_input[i] === "" || column_names[i] === "") {
-      valid_submit = false;
+  return headers_input;
+}
+
+
+// Send user inputs to python
+
+function sendUserInputToPython(but) {
+  if (but.value === "Combine") {
+    if (but.classList.contains("pre-pro-combine")) {
+      rm = document.getElementsByClassName("rmd-pp")[0]
+      console.log(rm.value)
     }
-    each_column_input_elements = column_names[i].split(",");
-    for (let j = 0; j < each_column_input_elements.length; j++) {
-      if (all_column_names.includes(each_column_input_elements[j]) === false) {
-        valid_column_names = false;
+    column_names_elements = document.getElementsByClassName("column-names-input");
+    column_names = [];
+    for (let i = 0; i < column_names_elements.length; i++) {
+      column_names.push(column_names_elements[i].value);
+    }
+    headers_input = getHeadersInput();
+    all_file_names = [...new Set(all_file_names)];
+    valid_submit = true;
+    valid_column_names = true;
+    for (let i = 0; i < column_names.length; i++) {
+      if (headers_input[i] === "" || column_names[i] === "") {
+        valid_submit = false;
+      }
+      each_column_input_elements = column_names[i].split(",");
+      for (let j = 0; j < each_column_input_elements.length; j++) {
+        if (all_column_names.includes(each_column_input_elements[j]) === false) {
+          valid_column_names = false;
+        }
       }
     }
-  }
-  //Check to ensure no value has been entered
-  all_user_inputs = document.getElementsByClassName("process-input-field");
-  number_of_all_user_inputs = 0;
-  for (const el of all_user_inputs) {
-    if (el.value.length > 0) number_of_all_user_inputs++;
+    //Check to ensure no value has been entered
+    all_user_inputs = document.getElementsByClassName("process-input-field");
+    number_of_all_user_inputs = 0;
+    for (const el of all_user_inputs) {
+      if (el.value.length > 0) number_of_all_user_inputs++;
+    }
+
+    //check to see if user has entered column input more than once
+    checkInput();
+    //
+    if (cols_same && valid_submit === false && number_of_all_user_inputs == 0) {
+      submitFiles(true);
+    } else if (valid_submit === false || valid_column_names === false) {
+      alert("Please fill all input fields properly");
+    } else if (more_than_one_input > 0) {
+      alert("You have entered a column input more than once");
+    } else if (valid_column_names === false) {
+      alert("Please fill column names input field with valid inputs");
+      // If checks have passed data will start from here
+    } else {
+      submitFiles();
+    }
+  } else {
+    document.getElementById("process-screen").style.display = "none";
+
+    // Fill with selected columns
+    addSelectedColumns();
+
+    document.getElementById("pre-process-screen").style.display = "block";
+
   }
 
-  //check to see if user has entered column input more than once
-  checkInput();
-  //
-  if (cols_same && valid_submit === false && number_of_all_user_inputs == 0) {
-    submitFiles(true);
-  } else if (valid_submit === false || valid_column_names === false) {
-    alert("Please fill all input fields properly");
-  } else if (more_than_one_input > 0) {
-    alert("You have entered a column input more than once");
-  } else if (valid_column_names === false) {
-    alert("Please fill column names input field with valid inputs");
-    // If checks have passed data will start from here
-  } else {
-    submitFiles();
-  }
   // final_status = await eel.finalCombine()();
 }
 
 function goBackToProcess() {
   document.getElementById("process-screen").style.display = "block";
   document.getElementById("end-screen").style.display = "none";
+  document.getElementById("pre-process-screen").style.display = "none";
 }
