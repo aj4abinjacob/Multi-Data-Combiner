@@ -383,6 +383,12 @@ function removeInputDiv(button) {
 
 // actual submit function
 async function submitFiles(one_go = false, clean_actions) {
+  log_cleaning = []
+  for (const act in clean_actions) {
+    if (act.includes("rnr896#")) { log_cleaning.push("Removing Blanks") }
+    else if (act.includes()) { log_cleaning.push("Removing Duplicates") }
+
+  }
   if (one_go === true) {
     headers_input = all_column_names;
     column_names = all_column_names;
@@ -398,6 +404,9 @@ async function submitFiles(one_go = false, clean_actions) {
     file_status = await eel.receiveInputs(file, headers_input, column_names)();
     document.getElementById("end-process-log").textContent = file_status;
     // console.log(file_status);
+  }
+  for (const val of log_cleaning) {
+    document.getElementById("end-process-log").textContent = val;
   }
 
   final_status = await eel.finalCombine(clean_actions)();
@@ -493,6 +502,7 @@ function getHeadersInput() {
 
 function sendUserInputToPython(but) {
   if (but.value === "Combine") {
+    document.getElementById("pre-process-screen").style.display = "none";
     // Check values from pre-process
     if (but.classList.contains("pre-pro-combine")) {
       pass_clean_actions = []

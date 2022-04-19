@@ -226,6 +226,16 @@
     padding-right: 10px;
 }
 
+#pre-pro-combine-button-container {
+    position: sticky;
+    bottom: 0;
+    right: 0;
+    padding-top: 5px;
+    text-align: right;
+    padding-bottom: 10px;
+    padding-right: 10px;
+}
+
 #left-pre-process {
     width: 65%;
     flex-grow: 2;
@@ -245,17 +255,30 @@
 .sub-pre-process {
     display: grid;
     flex-grow: 1;
-    justify-content: center;
+    /* justify-content: center; */
     margin-bottom: 10px;
+    padding: 40px;
+    background: #e9e8e7;
+    border-radius: 10px;
+    border: #e9e8e7;
+    border-width: 5px;
+}
 
+#pre-process-controls {
+    /* display: grid; */
+    text-align: center;
+    /* flex-grow: 1; */
+    /* justify-content: center; */
 }
 
 .pre-process-input-field {
     font-size: 11pt;
-    width: 200px;
     padding-left: 10px;
+    height: 25px;
+    width: 500px;
     border-radius: 8px;
     border-color: rgb(201, 201, 201);
+
 }
 
 .selected-columns {
