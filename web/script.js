@@ -474,6 +474,19 @@ function addAction() {
     sub_pre_process.appendChild(remove_dup_head)
     sub_pre_process.appendChild(remove_dup_inputs)
     main_pre_process.appendChild(sub_pre_process)
+  } else if (selected_action === "Remove Special Characters") {
+    sub_pre_process = document.createElement("div")
+    sub_pre_process.setAttribute("class", "sub-pre-process")
+    remove_dup_head = document.createElement("h3")
+    remove_dup_head.innerHTML = "Remove Special Characters"
+    remove_dup_inputs = document.createElement("input")
+    remove_dup_inputs.setAttribute("id", "remove-special-char-inputs")
+    remove_dup_inputs.setAttribute("class", "pre-process-input-field rsc-pp")
+    remove_dup_inputs.setAttribute("size", "20")
+    remove_dup_inputs.setAttribute("placeholder", "Write columns to be considered for removing special characters")
+    sub_pre_process.appendChild(remove_dup_head)
+    sub_pre_process.appendChild(remove_dup_inputs)
+    main_pre_process.appendChild(sub_pre_process)
   }
 }
 
@@ -517,6 +530,10 @@ function sendUserInputToPython(but) {
           rem_values = ele.childNodes[1]
           // console.log(`${rem_values.value}`)
           pass_clean_actions.push(`rnr896#${rem_values.value}`)
+        } else if (ele.firstChild.innerHTML === "Remove Special Characters") {
+          rem_values = ele.childNodes[1]
+          // console.log(`${rem_values.value}`)
+          pass_clean_actions.push(`rsc896#${rem_values.value}`)
         }
       }
       // rm = document.getElementsByClassName("rmd-pp")[0]

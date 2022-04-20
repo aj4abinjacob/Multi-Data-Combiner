@@ -7,6 +7,7 @@ import numpy
 from tkinter import Tk
 from tkinter import Label
 import time
+import re
 
 
 # File Cleaning
@@ -20,11 +21,20 @@ def removeDuplicates(df, cols):
 
 # Delete Null Rows
 def delNullRows(df, columns):
+    columns = [x for x in columns if x in df.columns]
     df = df.dropna(subset=columns)
     return df
 
 
-#
+# Remove Special Characters
+
+
+def removeSpecialCharacters(df, columns):
+    columns = [x for x in columns if x in df.columns]
+    for x in columns:
+        df[x] = df[x].apply(str)
+        df[x] = df[x].apply(lambda x: re.sub("[^A-Za-z0-9]+", "", x))
+    return df
 
 
 def readDf(file):
@@ -116,6 +126,10 @@ def finalCombine(clean_actions):
             action = action[7:]
             action = action.split(",")
             df = delNullRows(df, action)
+        elif action.startswith("rsc896#"):
+            action = action[7:]
+            action = action.split(",")
+            df = removeSpecialCharacters(df, action)
 
     root = Tk()  # this is to close the dialogue box later
     root.wm_attributes("-topmost", 1)
