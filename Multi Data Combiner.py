@@ -11,18 +11,18 @@ import re
 
 
 # File Cleaning
-def removeDuplicates(df, cols):
-    for x in cols:
-        if x not in df.columns:
-            cols.remove(x)
-    df = df.drop_duplicates(subset=cols)
+def removeDuplicates(df, columns):
+    columns = [x for x in columns if x in df.columns]
+    if len(columns) > 0:
+        df = df.drop_duplicates(subset=columns)
     return df
 
 
 # Delete Null Rows
 def delNullRows(df, columns):
     columns = [x for x in columns if x in df.columns]
-    df = df.dropna(subset=columns)
+    if len(columns) > 0:
+        df = df.dropna(subset=columns)
     return df
 
 
