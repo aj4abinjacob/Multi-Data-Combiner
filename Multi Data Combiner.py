@@ -33,7 +33,7 @@ def removeSpecialCharacters(df, columns):
     columns = [x for x in columns if x in df.columns]
     for x in columns:
         df[x] = df[x].apply(str)
-        df[x] = df[x].apply(lambda x: re.sub("[^A-Za-z0-9]+", "", x))
+        df[x] = df[x].apply(lambda x: re.sub("[^A-Za-z0-9\s]+", "", x))
     return df
 
 

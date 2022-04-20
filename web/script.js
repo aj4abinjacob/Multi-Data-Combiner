@@ -446,47 +446,51 @@ function addSelectedColumns() {
   }
 };
 
-function addAction() {
+function cleanRMSubClass(val) {
+  // console.log(val)
+  document.querySelectorAll(`.${val}`).forEach((el) => el.remove());
+
+}
+
+function addRmButton4Clean(val) {
+  remove_button = document.createElement("input");
+  remove_button.setAttribute("type", "button");
+  remove_button.setAttribute("value", "Remove");
+  remove_button.setAttribute(
+    "id",
+    `remove_button_${val}`
+  );
+  remove_button.setAttribute("onclick", `cleanRMSubClass("${val}")`)
+  return remove_button
+}
+
+function addSubPreProcess(action, placeholder) {
   main_pre_process = document.getElementById("main-pre-process")
+  sub_pre_process = document.createElement("div")
+  sub_pre_process.setAttribute("class", `sub-pre-process_${column_inputs_container_var} spp`)
+  action_head = document.createElement("h3")
+  action_head.innerHTML = action
+  action_inputs = document.createElement("input")
+  action_inputs.setAttribute("class", "pre-process-input-field")
+  action_inputs.setAttribute("size", "20")
+  action_inputs.setAttribute("placeholder", placeholder)
+  remove_button = addRmButton4Clean(`sub-pre-process_${column_inputs_container_var}`)
+  sub_pre_process.appendChild(action_head)
+  sub_pre_process.appendChild(action_inputs)
+  sub_pre_process.appendChild(remove_button)
+  main_pre_process.appendChild(sub_pre_process)
+  column_inputs_container_var++
+
+
+}
+
+function addAction() {
   if (selected_action === "Remove Duplicates") {
-    sub_pre_process = document.createElement("div")
-    sub_pre_process.setAttribute("class", "sub-pre-process")
-    remove_dup_head = document.createElement("h3")
-    remove_dup_head.innerHTML = "Remove Duplicates"
-    remove_dup_inputs = document.createElement("input")
-    remove_dup_inputs.setAttribute("id", "remove-dup-inputs")
-    remove_dup_inputs.setAttribute("class", "pre-process-input-field rmd-pp")
-    remove_dup_inputs.setAttribute("size", "20")
-    remove_dup_inputs.setAttribute("placeholder", "Write columns to be considered for removing duplicates")
-    sub_pre_process.appendChild(remove_dup_head)
-    sub_pre_process.appendChild(remove_dup_inputs)
-    main_pre_process.appendChild(sub_pre_process)
+    sub_pre_process = addSubPreProcess("Remove Duplicates", "Write columns to be considered for removing duplicates")
   } else if (selected_action === "Remove Blank Rows") {
-    sub_pre_process = document.createElement("div")
-    sub_pre_process.setAttribute("class", "sub-pre-process")
-    remove_dup_head = document.createElement("h3")
-    remove_dup_head.innerHTML = "Remove Blank Rows"
-    remove_dup_inputs = document.createElement("input")
-    remove_dup_inputs.setAttribute("id", "remove-blank-inputs")
-    remove_dup_inputs.setAttribute("class", "pre-process-input-field rbr-pp")
-    remove_dup_inputs.setAttribute("size", "20")
-    remove_dup_inputs.setAttribute("placeholder", "Write columns to be considered for removing blanks")
-    sub_pre_process.appendChild(remove_dup_head)
-    sub_pre_process.appendChild(remove_dup_inputs)
-    main_pre_process.appendChild(sub_pre_process)
+    sub_pre_process = addSubPreProcess("Remove Blank Rows", "Write columns to be considered for removing blanks")
   } else if (selected_action === "Remove Special Characters") {
-    sub_pre_process = document.createElement("div")
-    sub_pre_process.setAttribute("class", "sub-pre-process")
-    remove_dup_head = document.createElement("h3")
-    remove_dup_head.innerHTML = "Remove Special Characters"
-    remove_dup_inputs = document.createElement("input")
-    remove_dup_inputs.setAttribute("id", "remove-special-char-inputs")
-    remove_dup_inputs.setAttribute("class", "pre-process-input-field rsc-pp")
-    remove_dup_inputs.setAttribute("size", "20")
-    remove_dup_inputs.setAttribute("placeholder", "Write columns to be considered for removing special characters")
-    sub_pre_process.appendChild(remove_dup_head)
-    sub_pre_process.appendChild(remove_dup_inputs)
-    main_pre_process.appendChild(sub_pre_process)
+    sub_pre_process = addSubPreProcess("Remove Special Characters", "Write columns to be considered for removing special characters")
   }
 }
 
@@ -519,7 +523,7 @@ function sendUserInputToPython(but) {
     // Check values from pre-process
     if (but.classList.contains("pre-pro-combine")) {
       pass_clean_actions = []
-      sub_pre_process = document.getElementsByClassName("sub-pre-process")
+      sub_pre_process = document.getElementsByClassName("spp")
       for (const ele of sub_pre_process) {
         // console.log(ele)
         if (ele.firstChild.innerHTML === "Remove Duplicates") {
